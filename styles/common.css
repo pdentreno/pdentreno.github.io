@@ -4,7 +4,7 @@
 body {
   margin: 0;
   height: 100vh;
-  background-color: #eb7628;
+  background-color: black;
   font-family: Arial, sans-serif;
   position: relative;
 }
@@ -43,11 +43,14 @@ body::after {
   left: 20px;
 
   text-decoration: none;
+
+  background: black;
   color: #eb7628;
-  background: white;
+
+  border: 2px solid #eb7628;
+  border-radius: 8px;
 
   padding: 10px 14px;
-  border-radius: 8px;
   font-weight: bold;
 
   transition: 0.2s;
@@ -55,6 +58,8 @@ body::after {
 
 .back-button:hover {
   transform: scale(1.05);
+  background: #eb7628;
+  color: black;
 }
 
 /* Botón fullscreen */
@@ -63,10 +68,10 @@ body::after {
   top: 20px;
   right: 20px;
 
-  background: white;
+  background: black;
   color: #eb7628;
 
-  border: none;
+  border: 2px solid #eb7628;
   border-radius: 8px;
 
   padding: 10px 14px;
@@ -79,6 +84,8 @@ body::after {
 
 .fullscreen-button:hover {
   transform: scale(1.05);
+  background: #eb7628;
+  color: black;
 }
 
 /* =========================

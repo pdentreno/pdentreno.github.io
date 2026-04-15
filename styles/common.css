@@ -1,0 +1,93 @@
+/* =========================
+   BASE GLOBAL
+========================= */
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: #eb7628;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+/* =========================
+   IMAGEN GLOBAL (RECTANGULAR)
+========================= */
+body::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  width: 180px;   /* más ancho para formato rectangular */
+  height: 110px;  /* mantiene proporción horizontal */
+
+  margin: 16px;
+
+  background-image: url("../images/pd_3.jpeg");
+  background-size: cover;        /* mejor para imágenes rectangulares */
+  background-repeat: no-repeat;
+  background-position: center;
+
+  border-radius: 12px;           /* look más moderno */
+  opacity: 0.95;
+
+  transition: 0.2s;
+
+  pointer-events: none; /* no bloquea clicks */
+}
+
+/* Botón volver */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  text-decoration: none;
+  color: #eb7628;
+  background: white;
+
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.back-button:hover {
+  transform: scale(1.05);
+}
+
+/* Botón fullscreen */
+.fullscreen-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: white;
+  color: #eb7628;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.fullscreen-button:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+  body::after {
+    width: 130px;
+    height: 80px;
+  }
+}
+

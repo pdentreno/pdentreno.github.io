@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: #eb7628;
+  font-family: Arial, sans-serif;
+}
+
+/* Centro reloj */
+.clock-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hora */
+#clock {
+  font-size: 20vw;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 2px;
+
+  font-variant-numeric: tabular-nums;
+
+  /* evita que se rompa en pantallas pequeñas */
+  white-space: nowrap;
+}

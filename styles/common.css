@@ -18,25 +18,24 @@ body::after {
   bottom: 0;
   right: 0;
 
-  width: 180px;   /* más ancho para formato rectangular */
-  height: 110px;  /* mantiene proporción horizontal */
-
+  width: 180px;
+  height: 110px;
   margin: 16px;
 
   background-image: url("../images/pd_3.jpeg");
-  background-size: cover;        /* mejor para imágenes rectangulares */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 
-  border-radius: 12px;           /* look más moderno */
+  border-radius: 12px;
   opacity: 0.95;
 
-  transition: 0.2s;
-
-  pointer-events: none; /* no bloquea clicks */
+  pointer-events: none;
 }
 
-/* Botón volver */
+/* =========================
+   BOTÓN VOLVER (IZQUIERDA)
+========================= */
 .back-button {
   position: absolute;
   top: 20px;
@@ -62,7 +61,23 @@ body::after {
   color: black;
 }
 
-/* Botón fullscreen */
+/* =========================
+   TEXTO CENTRADO (HOLA)
+========================= */
+.top-center-text {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  color: #eb7628;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* =========================
+   FULLSCREEN (DERECHA)
+========================= */
 .fullscreen-button {
   position: absolute;
   top: 20px;
@@ -97,4 +112,3 @@ body::after {
     height: 80px;
   }
 }
-

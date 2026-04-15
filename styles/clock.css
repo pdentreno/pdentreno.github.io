@@ -1,4 +1,6 @@
-/* Centro reloj */
+/* =========================
+   CENTRO RELOJ
+========================= */
 .clock-container {
   height: 100%;
   display: flex;
@@ -6,7 +8,9 @@
   align-items: center;
 }
 
-/* Hora */
+/* =========================
+   RELOJ
+========================= */
 #clock {
   font-size: 20vw;
   font-weight: bold;
@@ -15,6 +19,5 @@
 
   font-variant-numeric: tabular-nums;
 
-  /* evita que se rompa en pantallas pequeñas */
   white-space: nowrap;
 }

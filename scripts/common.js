@@ -1,3 +1,5 @@
+document.title = "PD Timer";
+
 // =========================
 // FULLSCREEN BUTTON
 // =========================

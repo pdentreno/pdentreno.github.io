@@ -5,12 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>For Time / AMRAP</title>
+  <title></title>
 
-  <!-- Estilos globales -->
   <link rel="stylesheet" href="../styles/common.css">
-
-  <!-- Estilos específicos -->
   <link rel="stylesheet" href="../styles/for_time.css">
 </head>
 
@@ -19,15 +16,54 @@
   <!-- Botón volver -->
   <a class="back-button" href="../index.html">← Volver</a>
 
-  <!-- Botón fullscreen -->
+  <!-- CENTRO -->
+  <div class="top-center-text">FOR TIME / AMRAP</div>
+
+  <!-- FULLSCREEN -->
   <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="container">
+
+    <!-- SETUP -->
+    <div class="setup" id="setup">
+
+      <div class="time-inputs">
+
+        <div class="time-row">
+          <input type="number" min="0" placeholder="0">
+          <span>HOURS</span>
+        </div>
+
+        <div class="time-row">
+          <input type="number" min="0" placeholder="0">
+          <span>MINUTES</span>
+        </div>
+
+        <div class="time-row">
+          <input type="number" min="0" placeholder="0">
+          <span>SECONDS</span>
+        </div>
+
+      </div>
+
+      <button class="start-button">START</button>
+
+      <div class="error-message" id="errorMessage"></div>
+
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-screen hidden" id="countdownScreen">
+      <div id="countdownDisplay">10</div>
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer-screen hidden" id="timerScreen">
+      <div id="timerDisplay">00:00:00</div>
+    </div>
 
   </main>
 
-  <!-- JS -->
   <script src="../scripts/for_time.js"></script>
 
 </body>

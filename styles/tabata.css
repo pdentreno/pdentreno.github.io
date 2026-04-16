@@ -1,0 +1,90 @@
+/* CENTRADO GENERAL */
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* FORMULARIO (SIN BORDE EXTERIOR) */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 30px 25px;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+
+  min-width: 280px; /* más compacto */
+}
+
+/* FILAS */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+/* LABEL */
+.label {
+  width: 70px;
+  font-size: 16px;
+  color: #eb7628;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* INPUT (MÁS PEQUEÑO) */
+.row input {
+  width: 70px;  /* 🔥 reducción clave */
+
+  padding: 8px;
+  font-size: 16px;
+  text-align: center;
+
+  border: 2px solid #eb7628;
+  border-radius: 8px;
+
+  background: black;
+  color: #eb7628;
+}
+
+/* SUFFIX */
+.suffix {
+  font-size: 14px;
+  color: #eb7628;
+  white-space: nowrap;
+  min-width: 70px; /* 🔥 reserva espacio fijo */
+}
+
+.suffix.placeholder {
+  visibility: hidden; /* ocupa espacio pero no se ve */
+}
+
+/* BOTÓN START */
+.start-button {
+  margin-top: 10px;
+
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+
+  border: 2px solid #eb7628;
+  border-radius: 10px;
+
+  background: black;
+  color: #eb7628;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.start-button:hover {
+  background: #eb7628;
+  color: black;
+  transform: scale(1.05);
+}

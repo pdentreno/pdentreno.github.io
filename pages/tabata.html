@@ -5,33 +5,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title></title>
+  <title>PD Timer</title>
 
-  <!-- Estilos globales -->
   <link rel="stylesheet" href="../styles/common.css">
-
-  <!-- Estilos específicos -->
   <link rel="stylesheet" href="../styles/tabata.css">
 </head>
 
 <body>
 
-  <!-- Botón volver -->
   <a class="back-button" href="../index.html">← Volver</a>
 
-  <!-- CENTRO -->
   <div class="top-center-text">TABATA / EMOM</div>
 
-  <!-- Botón fullscreen (opcional) -->
   <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="container">
+
+    <div class="form">
+
+      <div class="row">
+        <span class="label">WORK</span>
+        <input type="number" id="workInput" min="0" placeholder="0">
+        <span class="suffix">seconds</span>
+      </div>
+
+      <div class="row">
+        <span class="label">REST</span>
+        <input type="number" id="restInput" min="0" placeholder="0">
+        <span class="suffix">seconds</span>
+      </div>
+
+      <div class="row">
+        <span class="label">ROUNDS</span>
+        <input type="number" id="roundsInput" min="0" placeholder="0">
+        <span class="suffix"></span>
+      </div>
+
+      <div class="row">
+        <span class="label">SETS</span>
+        <input type="number" id="setsInput" min="0" placeholder="0">
+        <span class="suffix"></span>
+      </div>
+
+      <div class="row">
+        <span class="label">REST BETWEEN SETS</span>
+        <input type="number" id="restSetsInput" min="0" placeholder="0">
+        <span class="suffix">seconds</span>
+      </div>
+
+      <button class="start-button">START</button>
+
+    </div>
 
   </main>
 
-  <!-- JS -->
-  <script src="../scripts/common.js"></script>
   <script src="../scripts/tabata.js"></script>
 
 </body>

@@ -1,4 +1,6 @@
-/* CENTRADO GENERAL */
+/* =========================
+   CENTRADO GENERAL
+========================= */
 .container {
   height: 100%;
   display: flex;
@@ -6,7 +8,9 @@
   align-items: center;
 }
 
-/* FORMULARIO (SIN BORDE EXTERIOR) */
+/* =========================
+   FORMULARIO
+========================= */
 .form {
   display: flex;
   flex-direction: column;
@@ -17,7 +21,7 @@
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
 
-  min-width: 280px; /* más compacto */
+  min-width: 300px;
 }
 
 /* FILAS */
@@ -25,22 +29,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 10px;
 }
 
 /* LABEL */
 .label {
-  width: 70px;
+  width: 120px;
   font-size: 16px;
   color: #eb7628;
   font-weight: bold;
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
-/* INPUT (MÁS PEQUEÑO) */
+/* INPUT */
 .row input {
-  width: 70px;  /* 🔥 reducción clave */
+  width: 80px;
 
   padding: 8px;
   font-size: 16px;
@@ -58,14 +62,10 @@
   font-size: 14px;
   color: #eb7628;
   white-space: nowrap;
-  min-width: 70px; /* 🔥 reserva espacio fijo */
+  min-width: 70px;
 }
 
-.suffix.placeholder {
-  visibility: hidden; /* ocupa espacio pero no se ve */
-}
-
-/* BOTÓN START */
+/* BOTÓN */
 .start-button {
   margin-top: 10px;
 
@@ -87,4 +87,62 @@
   background: #eb7628;
   color: black;
   transform: scale(1.05);
+}
+
+/* =========================
+   TIMER SCREEN (UNIFICADO)
+========================= */
+.hidden {
+  display: none !important;
+}
+
+#timerScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* FASE */
+#phaseDisplay {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* TIMER PRINCIPAL (UNIFICADO CON FOR TIME) */
+#timeDisplay {
+  font-size: 12vw; /* 🔥 IGUAL QUE FOR TIME TIMER */
+  font-weight: bold;
+  color: #eb7628;
+
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================
+   COLORES FASES
+========================= */
+.work {
+  color: #00ff88;
+}
+
+.rest {
+  color: #ff3b3b;
+}
+
+.set-rest {
+  color: #00bfff;
+}
+
+/* =========================
+   ERROR
+========================= */
+.error-message {
+  margin-top: 10px;
+  text-align: center;
+
+  font-size: 14px;
+  color: #ff3b3b;
+  min-height: 18px;
 }

@@ -19,6 +19,15 @@ const timeDisplay = document.getElementById("timeDisplay");
 const errorMessage = document.getElementById("errorMessage");
 
 // ==========================
+// SOUNDS
+// ==========================
+const s3 = new Audio("../sounds/countdown_3.wav");
+const s2 = new Audio("../sounds/countdown_2.wav");
+const s1 = new Audio("../sounds/countdown_1.wav");
+const go = new Audio("../sounds/go.wav");
+const finish = new Audio("../sounds/finish.wav");
+
+// ==========================
 // STATE
 // ==========================
 let isRunning = false;
@@ -37,6 +46,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // ==========================
 startButton.addEventListener("click", () => {
     if (isRunning) return;
+
+    unlockAudio();
 
     errorMessage.textContent = "";
 
@@ -70,6 +81,29 @@ startButton.addEventListener("click", () => {
 });
 
 // ==========================
+// AUDIO UNLOCK
+// ==========================
+function unlockAudio() {
+    const tempSound = new Audio("../sounds/beep.wav");
+
+    tempSound.play()
+        .then(() => {
+            tempSound.pause();
+            tempSound.currentTime = 0;
+        })
+        .catch(() => { });
+}
+
+// ==========================
+// SAFE PLAY
+// ==========================
+function playSound(sound) {
+    const clone = sound.cloneNode();
+    clone.currentTime = 0;
+    clone.play().catch(() => { });
+}
+
+// ==========================
 // PRE COUNTDOWN (10s)
 // ==========================
 function startPreCountdown() {
@@ -84,10 +118,18 @@ function startPreCountdown() {
 
             count--;
 
-            timeDisplay.textContent = String(Math.max(count, 0));
-            if (count < 0) {
+            // 🔊 3-2-1 en countdown inicial
+            if (count === 3) playSound(s3);
+            if (count === 2) playSound(s2);
+            if (count === 1) playSound(s1);
+
+            if (count <= 0) {
                 clearInterval(interval);
+                go.currentTime = 0;
+                go.play().catch(() => { });
                 resolve();
+            } else {
+                timeDisplay.textContent = String(count);
             }
 
         }, 1000);
@@ -117,6 +159,8 @@ async function runWorkout(work, rest, rounds, sets, restSets) {
 
     phaseDisplay.textContent = "FINISHED";
     timeDisplay.textContent = "00:00:00";
+    finish.currentTime = 0;
+    finish.play().catch(() => { });
 }
 
 // ==========================
@@ -133,6 +177,11 @@ function runPhase(type, duration, round, set) {
         interval = setInterval(() => {
 
             time--;
+
+            // 🔊 3-2-1 en últimos segundos
+            if (time === 3) playSound(s3);
+            if (time === 2) playSound(s2);
+            if (time === 1) playSound(s1);
 
             updateTime(time);
 

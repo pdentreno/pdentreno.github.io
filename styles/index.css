@@ -9,14 +9,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 260px;
+  width: 350px;
 }
 
 /* Botones */
 button {
   width: 100%;
-  padding: 14px;
-  font-size: 16px;
+  padding: 30px;
+  font-size: 24px;
 
   border: 2px solid #eb7628;
   border-radius: 10px;

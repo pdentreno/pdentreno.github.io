@@ -1,96 +1,109 @@
 /* =========================
-   CENTRADO GENERAL
+   CONTENEDOR
 ========================= */
 .container {
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* =========================
-   FORMULARIO
+   SETUP / FORMULARIO
 ========================= */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-
-  padding: 30px 25px;
-
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-
-  min-width: 300px;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+  max-width: 500px;
 }
 
 /* FILAS */
 .row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-/* LABEL */
-.label {
-  width: 120px;
-  font-size: 16px;
-  color: #eb7628;
-  font-weight: bold;
-  letter-spacing: 1px;
-  white-space: nowrap;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
 }
 
 /* INPUT */
 .row input {
-  width: 80px;
+  width: 100px;
+  padding: 15px;
 
-  padding: 8px;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
+
+  background: black;
+  color: #eb7628;
 
   border: 2px solid #eb7628;
   border-radius: 8px;
 
-  background: black;
+  outline: none;
+}
+
+/* LABEL */
+.row .label {
   color: #eb7628;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 1px;
+  min-width: 100px;
+  text-align: right;
 }
 
 /* SUFFIX */
-.suffix {
-  font-size: 14px;
+.row .suffix {
   color: #eb7628;
-  white-space: nowrap;
-  min-width: 70px;
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 1px;
+  min-width: 80px;
+  text-align: left;
 }
 
 /* BOTÓN */
 .start-button {
-  margin-top: 10px;
+  padding: 16px 40px;
 
-  padding: 12px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-
-  border: 2px solid #eb7628;
-  border-radius: 10px;
 
   background: black;
   color: #eb7628;
 
+  border: 2px solid #eb7628;
+  border-radius: 8px;
+
   cursor: pointer;
+
   transition: 0.2s;
+  width: 95%;
 }
 
 .start-button:hover {
+  transform: scale(1.02);
   background: #eb7628;
   color: black;
-  transform: scale(1.05);
+}
+
+/* ERROR */
+.error-message {
+  color: #ff4d4d;
+  font-size: 16px;
+  min-height: 20px;
+  text-align: center;
 }
 
 /* =========================
-   TIMER SCREEN (UNIFICADO)
+   TIMER SCREEN
 ========================= */
 .hidden {
   display: none !important;
@@ -99,50 +112,34 @@
 #timerScreen {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 30px;
+  height: 100%;
 }
 
-/* FASE */
-#phaseDisplay {
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-}
-
-/* TIMER PRINCIPAL (UNIFICADO CON FOR TIME) */
 #timeDisplay {
-  font-size: 12vw; /* 🔥 IGUAL QUE FOR TIME TIMER */
+  font-size: 15vw;
   font-weight: bold;
   color: #eb7628;
-
   font-variant-numeric: tabular-nums;
 }
 
-/* =========================
-   COLORES FASES
-========================= */
-.work {
-  color: #00ff88;
-}
-
-.rest {
-  color: #ff3b3b;
-}
-
-.set-rest {
-  color: #00bfff;
-}
-
-/* =========================
-   ERROR
-========================= */
-.error-message {
-  margin-top: 10px;
+#phaseDisplay {
+  font-size: 6vw;
+  font-weight: bold;
+  color: #eb7628;
   text-align: center;
+}
 
-  font-size: 14px;
-  color: #ff3b3b;
-  min-height: 18px;
+#phaseDisplay.work {
+  color: #00ff00;
+}
+
+#phaseDisplay.rest {
+  color: #ff6b6b;
+}
+
+#phaseDisplay.set-rest {
+  color: #ffd700;
 }

@@ -178,10 +178,10 @@ function runPhase(type, duration, round, set) {
 
             time--;
 
-            // 🔊 3-2-1 en últimos segundos
-            if (time === 3) playSound(s3);
-            if (time === 2) playSound(s2);
-            if (time === 1) playSound(s1);
+            // 🔊 2-1-0 en últimos segundos
+            if (time === 2) playSound(s3);
+            if (time === 1) playSound(s2);
+            if (time === 0) playSound(s1);
 
             updateTime(time);
 

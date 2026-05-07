@@ -24,6 +24,30 @@ let countdownInterval;
 let timerInterval;
 
 /* =========================
+   LOAD SAVED VALUES
+========================= */
+window.addEventListener("DOMContentLoaded", () => {
+    const savedHours = localStorage.getItem("fortime_hours") || "";
+    const savedMinutes = localStorage.getItem("fortime_minutes") || "";
+    const savedSeconds = localStorage.getItem("fortime_seconds") || "";
+
+    inputs[0].value = savedHours;
+    inputs[1].value = savedMinutes;
+    inputs[2].value = savedSeconds;
+});
+
+/* =========================
+   SAVE VALUES ON INPUT
+========================= */
+inputs.forEach((input) => {
+    input.addEventListener("change", () => {
+        localStorage.setItem("fortime_hours", inputs[0].value);
+        localStorage.setItem("fortime_minutes", inputs[1].value);
+        localStorage.setItem("fortime_seconds", inputs[2].value);
+    });
+});
+
+/* =========================
    START
 ========================= */
 startButton.addEventListener("click", () => {

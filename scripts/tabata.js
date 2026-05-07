@@ -39,7 +39,29 @@ let interval = null;
 window.addEventListener("DOMContentLoaded", () => {
     timerScreen.classList.add("hidden");
     errorMessage.textContent = "";
+
+    // Load saved values
+    const savedWork = localStorage.getItem("tabata_work") || "";
+    const savedRest = localStorage.getItem("tabata_rest") || "";
+    const savedRounds = localStorage.getItem("tabata_rounds") || "";
+    const savedSets = localStorage.getItem("tabata_sets") || "";
+    const savedRestSets = localStorage.getItem("tabata_restSets") || "";
+
+    workInput.value = savedWork;
+    restInput.value = savedRest;
+    roundsInput.value = savedRounds;
+    setsInput.value = savedSets;
+    restSetsInput.value = savedRestSets;
 });
+
+// ==========================
+// SAVE VALUES ON INPUT
+// ==========================
+workInput.addEventListener("change", () => localStorage.setItem("tabata_work", workInput.value));
+restInput.addEventListener("change", () => localStorage.setItem("tabata_rest", restInput.value));
+roundsInput.addEventListener("change", () => localStorage.setItem("tabata_rounds", roundsInput.value));
+setsInput.addEventListener("change", () => localStorage.setItem("tabata_sets", setsInput.value));
+restSetsInput.addEventListener("change", () => localStorage.setItem("tabata_restSets", restSetsInput.value));
 
 // ==========================
 // START

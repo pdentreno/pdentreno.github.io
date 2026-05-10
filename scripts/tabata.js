@@ -167,15 +167,16 @@ async function runWorkout(work, rest, rounds, sets, restSets) {
 
         for (let round = 1; round <= rounds; round++) {
 
-            await runPhase("WORK", work, round, set);
+            const isLastPhase = set === sets && round === rounds;
+            await runPhase("WORK", work, round, set, isLastPhase);
 
             if (rest > 0 && round < rounds) {
-                await runPhase("REST", rest, round, set);
+                await runPhase("REST", rest, round, set, false);
             }
         }
 
         if (restSets > 0 && set < sets) {
-            await runPhase("REST BETWEEN SETS", restSets, 0, set);
+            await runPhase("REST BETWEEN SETS", restSets, 0, set, false);
         }
     }
 
@@ -188,7 +189,7 @@ async function runWorkout(work, rest, rounds, sets, restSets) {
 // ==========================
 // PHASE ENGINE
 // ==========================
-function runPhase(type, duration, round, set) {
+function runPhase(type, duration, round, set, isLastPhase) {
     return new Promise(resolve => {
 
         let time = duration;
@@ -200,17 +201,32 @@ function runPhase(type, duration, round, set) {
 
             time--;
 
-            // 🔊 2-1-0 en últimos segundos
-            if (time === 2) playSound(s3);
-            if (time === 1) playSound(s2);
-            if (time === 0) playSound(s1);
+            // 🔊 3-2-1 en últimos segundos
+            if (time === 3) playSound(s3);
+            else if (time === 2) playSound(s2);
+            else if (time === 1) playSound(s1);
 
-            updateTime(time);
+            if (time === 0) {
+                updateTime(time);
+
+                if (isLastPhase) {
+                    clearInterval(interval);
+                    resolve();
+                    return;
+                }
+
+                clearInterval(interval);
+                resolve();
+                return;
+            }
 
             if (time < 0) {
                 clearInterval(interval);
                 resolve();
+                return;
             }
+
+            updateTime(time);
 
         }, 1000);
     });

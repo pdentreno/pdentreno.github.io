@@ -156,7 +156,7 @@
 ========================= */
 #countdownPaused {
   position: absolute;
-  bottom: 25%;
+  bottom: 12%;
   width: 100%;
   text-align: center;
 
@@ -165,4 +165,14 @@
   font-style: italic;
 
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.08s ease;
+  will-change: opacity, visibility, transform;
+  transform: translateZ(0);
+}
+
+#countdownPaused.visible {
+  opacity: 1;
+  visibility: visible;
 }

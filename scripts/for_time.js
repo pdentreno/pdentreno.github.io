@@ -29,6 +29,10 @@ let preCountdownCount = 0;
 let preCountdownResolve = null;
 let preCountdownParams = null;
 
+let timerActive = false;
+let timerPaused = false;
+let timerTotal = 0;
+
 /* =========================
    LOAD SAVED VALUES
 ========================= */
@@ -42,26 +46,42 @@ window.addEventListener("DOMContentLoaded", () => {
     inputs[2].value = savedSeconds;
 
     document.body.addEventListener("click", event => {
-        if (!preCountdownActive) return;
+        if (!preCountdownActive && !timerActive) return;
         if (event.target.closest("button")) return;
 
-        if (preCountdownPaused) {
-            resumePreCountdown();
-        } else {
-            pausePreCountdown();
+        if (preCountdownActive) {
+            if (preCountdownPaused) {
+                resumePreCountdown();
+            } else {
+                pausePreCountdown();
+            }
+        } else if (timerActive) {
+            if (timerPaused) {
+                resumeTimer();
+            } else {
+                pauseTimer();
+            }
         }
     });
 
     window.addEventListener("keydown", event => {
-        if (!preCountdownActive) return;
+        if (!preCountdownActive && !timerActive) return;
         if (event.code !== "Space") return;
 
         event.preventDefault();
 
-        if (preCountdownPaused) {
-            resumePreCountdown();
-        } else {
-            pausePreCountdown();
+        if (preCountdownActive) {
+            if (preCountdownPaused) {
+                resumePreCountdown();
+            } else {
+                pausePreCountdown();
+            }
+        } else if (timerActive) {
+            if (timerPaused) {
+                resumeTimer();
+            } else {
+                pauseTimer();
+            }
         }
     });
 });
@@ -168,7 +188,8 @@ function pausePreCountdown() {
 
     clearInterval(countdownInterval);
     preCountdownPaused = true;
-    countdownPaused.textContent = "paused";
+    countdownPaused.textContent = "PAUSED";
+    countdownPaused.classList.add("visible");
 }
 
 function resumePreCountdown() {
@@ -180,26 +201,62 @@ function resumePreCountdown() {
 }
 
 /* =========================
+   TIMER PAUSE/RESUME
+========================= */
+function pauseTimer() {
+    if (!timerActive || timerPaused) return;
+
+    timerPaused = true;
+    const timerPausedElement = document.getElementById("timerPaused");
+    if (timerPausedElement) {
+        timerPausedElement.textContent = "PAUSED";
+        timerPausedElement.classList.add("visible");
+    }
+}
+
+function resumeTimer() {
+    if (!timerActive || !timerPaused) return;
+
+    timerPaused = false;
+    const timerPausedElement = document.getElementById("timerPaused");
+    if (timerPausedElement) {
+        timerPausedElement.textContent = "";
+        timerPausedElement.classList.remove("visible");
+        // force repaint for Safari
+        void timerPausedElement.offsetHeight;
+    }
+}
+
+/* =========================
    TIMER
 ========================= */
 function startTimer(h, m, s) {
     countdownScreen.classList.add("hidden");
     timerScreen.classList.remove("hidden");
 
-    let total = h * 3600 + m * 60 + s;
+    timerActive = true;
+    timerPaused = false;
+    timerTotal = h * 3600 + m * 60 + s;
 
-    updateDisplay(total);
+    updateDisplay(timerTotal);
+    startTimerInterval();
+}
 
+function startTimerInterval() {
     timerInterval = setInterval(() => {
-        total--;
+        if (timerPaused) return; // No decrementar si está pausado
+
+        timerTotal--;
 
         // 🔊 3-2-1 en últimos segundos del TIMER
-        if (total === 3) playSound(s3);
-        if (total === 2) playSound(s2);
-        if (total === 1) playSound(s1);
+        if (timerTotal === 3) playSound(s3);
+        if (timerTotal === 2) playSound(s2);
+        if (timerTotal === 1) playSound(s1);
 
-        if (total <= 0) {
+        if (timerTotal <= 0) {
             clearInterval(timerInterval);
+            timerActive = false;
+            timerPaused = false;
 
             updateDisplay(0);
 
@@ -209,7 +266,7 @@ function startTimer(h, m, s) {
             return;
         }
 
-        updateDisplay(total);
+        updateDisplay(timerTotal);
 
     }, 1000);
 }

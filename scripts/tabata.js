@@ -37,9 +37,12 @@ let countdownInterval = null;
 
 let preCountdownActive = false;
 let preCountdownPaused = false;
-
 let preCountdownCount = 10;
 let preCountdownResolve = null;
+
+let phaseActive = false;
+let phasePaused = false;
+let phaseRemaining = 0;
 
 // ==========================
 // INIT
@@ -55,18 +58,26 @@ window.addEventListener("DOMContentLoaded", () => {
     restSetsInput.value = localStorage.getItem("tabata_restSets") || "";
 
     document.body.addEventListener("click", (event) => {
-        if (!preCountdownActive) return;
+        if (!preCountdownActive && !phaseActive) return;
         if (event.target.closest("button")) return;
 
-        preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+        if (preCountdownActive) {
+            preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+        } else {
+            phasePaused ? resumePhase() : pausePhase();
+        }
     });
 
     window.addEventListener("keydown", (event) => {
-        if (!preCountdownActive) return;
+        if (!preCountdownActive && !phaseActive) return;
         if (event.code !== "Space") return;
 
         event.preventDefault();
-        preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+        if (preCountdownActive) {
+            preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+        } else {
+            phasePaused ? resumePhase() : pausePhase();
+        }
     });
 });
 
@@ -147,6 +158,7 @@ function startPreCountdown() {
         preCountdownResolve = resolve;
 
         countdownPaused.textContent = "";
+        countdownPaused.classList.remove("visible");
 
         timeDisplay.textContent = preCountdownCount; // 👈 sin 09
 
@@ -193,13 +205,31 @@ function pausePreCountdown() {
     if (!preCountdownActive || preCountdownPaused) return;
 
     preCountdownPaused = true;
-    countdownPaused.textContent = "paused";
+    countdownPaused.textContent = "PAUSED";
+    countdownPaused.classList.add("visible");
 }
 
 function resumePreCountdown() {
     if (!preCountdownActive || !preCountdownPaused) return;
 
     preCountdownPaused = false;
+    countdownPaused.classList.remove("visible");
+    countdownPaused.textContent = "";
+}
+
+function pausePhase() {
+    if (!phaseActive || phasePaused) return;
+
+    phasePaused = true;
+    countdownPaused.textContent = "PAUSED";
+    countdownPaused.classList.add("visible");
+}
+
+function resumePhase() {
+    if (!phaseActive || !phasePaused) return;
+
+    phasePaused = false;
+    countdownPaused.classList.remove("visible");
     countdownPaused.textContent = "";
 }
 
@@ -240,12 +270,20 @@ function runPhase(type, duration, round, set, isLastPhase) {
 
         let time = duration;
 
+        phaseActive = true;
+        phasePaused = false;
+        phaseRemaining = time;
+        countdownPaused.classList.remove("visible");
+        countdownPaused.textContent = "";
+
         updatePhase(type, round, set);
         updateTime(time);
 
         const interval = setInterval(() => {
+            if (phasePaused) return;
 
             time--;
+            phaseRemaining = time;
 
             if (time === 3) playSound(s3);
             if (time === 2) playSound(s2);
@@ -253,6 +291,8 @@ function runPhase(type, duration, round, set, isLastPhase) {
 
             if (time <= 0) {
                 clearInterval(interval);
+                phaseActive = false;
+                phasePaused = false;
                 resolve();
                 return;
             }

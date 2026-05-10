@@ -114,12 +114,25 @@
   color: #eb7628;
 }
 
-#countdownPaused {
+#countdownPaused,
+#timerPaused {
   min-height: 3vw;
   font-size: 2.5vw;
   color: rgba(235, 118, 40, 0.55);
   font-style: italic;
   text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.08s ease;
+  will-change: opacity, visibility, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+#countdownPaused.visible,
+#timerPaused.visible {
+  visibility: visible;
+  opacity: 1;
 }
 
 /* TIMER */
@@ -130,6 +143,7 @@
 
   font-variant-numeric: tabular-nums;
 }
+
 
 /* OCULTO */
 .hidden {

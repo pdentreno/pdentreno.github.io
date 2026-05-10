@@ -101,15 +101,25 @@
 .countdown-screen,
 .timer-screen {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100%;
+  gap: 20px;
 }
 
 #countdownDisplay {
   font-size: 15vw;
   font-weight: bold;
   color: #eb7628;
+}
+
+#countdownPaused {
+  min-height: 3vw;
+  font-size: 2.5vw;
+  color: rgba(235, 118, 40, 0.55);
+  font-style: italic;
+  text-align: center;
 }
 
 /* TIMER */

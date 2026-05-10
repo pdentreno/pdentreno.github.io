@@ -1,4 +1,4 @@
-setupFullscreen();// =========================
+setupFullscreen();
 
 // ==========================
 // ELEMENTOS
@@ -17,6 +17,7 @@ const timerScreen = document.getElementById("timerScreen");
 const phaseDisplay = document.getElementById("phaseDisplay");
 const timeDisplay = document.getElementById("timeDisplay");
 const errorMessage = document.getElementById("errorMessage");
+const countdownPaused = document.getElementById("countdownPaused");
 
 // ==========================
 // SOUNDS
@@ -31,7 +32,14 @@ const finish = new Audio("../sounds/finish.wav");
 // STATE
 // ==========================
 let isRunning = false;
-let interval = null;
+
+let countdownInterval = null;
+
+let preCountdownActive = false;
+let preCountdownPaused = false;
+
+let preCountdownCount = 10;
+let preCountdownResolve = null;
 
 // ==========================
 // INIT
@@ -40,22 +48,30 @@ window.addEventListener("DOMContentLoaded", () => {
     timerScreen.classList.add("hidden");
     errorMessage.textContent = "";
 
-    // Load saved values
-    const savedWork = localStorage.getItem("tabata_work") || "";
-    const savedRest = localStorage.getItem("tabata_rest") || "";
-    const savedRounds = localStorage.getItem("tabata_rounds") || "";
-    const savedSets = localStorage.getItem("tabata_sets") || "";
-    const savedRestSets = localStorage.getItem("tabata_restSets") || "";
+    workInput.value = localStorage.getItem("tabata_work") || "";
+    restInput.value = localStorage.getItem("tabata_rest") || "";
+    roundsInput.value = localStorage.getItem("tabata_rounds") || "";
+    setsInput.value = localStorage.getItem("tabata_sets") || "";
+    restSetsInput.value = localStorage.getItem("tabata_restSets") || "";
 
-    workInput.value = savedWork;
-    restInput.value = savedRest;
-    roundsInput.value = savedRounds;
-    setsInput.value = savedSets;
-    restSetsInput.value = savedRestSets;
+    document.body.addEventListener("click", (event) => {
+        if (!preCountdownActive) return;
+        if (event.target.closest("button")) return;
+
+        preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+    });
+
+    window.addEventListener("keydown", (event) => {
+        if (!preCountdownActive) return;
+        if (event.code !== "Space") return;
+
+        event.preventDefault();
+        preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+    });
 });
 
 // ==========================
-// SAVE VALUES ON INPUT
+// SAVE VALUES
 // ==========================
 workInput.addEventListener("change", () => localStorage.setItem("tabata_work", workInput.value));
 restInput.addEventListener("change", () => localStorage.setItem("tabata_rest", restInput.value));
@@ -70,7 +86,6 @@ startButton.addEventListener("click", () => {
     if (isRunning) return;
 
     unlockAudio();
-
     errorMessage.textContent = "";
 
     const work = Number(workInput.value);
@@ -86,7 +101,7 @@ startButton.addEventListener("click", () => {
         !isValid(sets, true) ||
         !isValid(restSets, false)
     ) {
-        errorMessage.textContent = "Enter valid values ​​(positive integers)";
+        errorMessage.textContent = "Enter valid values (positive integers)";
         return;
     }
 
@@ -103,63 +118,93 @@ startButton.addEventListener("click", () => {
 });
 
 // ==========================
-// AUDIO UNLOCK
+// AUDIO
 // ==========================
 function unlockAudio() {
-    const tempSound = new Audio("../sounds/beep.wav");
-
-    tempSound.play()
-        .then(() => {
-            tempSound.pause();
-            tempSound.currentTime = 0;
-        })
-        .catch(() => { });
+    const temp = new Audio("../sounds/beep.wav");
+    temp.play().then(() => {
+        temp.pause();
+        temp.currentTime = 0;
+    }).catch(() => {});
 }
 
-// ==========================
-// SAFE PLAY
-// ==========================
 function playSound(sound) {
-    const clone = sound.cloneNode();
-    clone.currentTime = 0;
-    clone.play().catch(() => { });
+    const c = sound.cloneNode();
+    c.currentTime = 0;
+    c.play().catch(() => {});
 }
 
 // ==========================
-// PRE COUNTDOWN (10s)
+// PRE COUNTDOWN (FIXED + PAUSE)
 // ==========================
 function startPreCountdown() {
     return new Promise(resolve => {
 
-        let count = 10;
+        preCountdownActive = true;
+        preCountdownPaused = false;
 
-        phaseDisplay.textContent = "";
-        timeDisplay.textContent = `${String(count).padStart(2, "0")}`;
+        preCountdownCount = 10;
+        preCountdownResolve = resolve;
 
-        interval = setInterval(() => {
+        countdownPaused.textContent = "";
 
-            count--;
+        timeDisplay.textContent = preCountdownCount; // 👈 sin 09
 
-            // 🔊 3-2-1 en countdown inicial
-            if (count === 3) playSound(s3);
-            if (count === 2) playSound(s2);
-            if (count === 1) playSound(s1);
-
-            if (count <= 0) {
-                clearInterval(interval);
-                go.currentTime = 0;
-                go.play().catch(() => { });
-                resolve();
-            } else {
-                timeDisplay.textContent = String(count);
-            }
-
-        }, 1000);
+        tickCountdown();
     });
 }
 
+function tickCountdown() {
+
+    countdownInterval = setInterval(() => {
+
+        if (preCountdownPaused) return;
+
+        preCountdownCount--;
+
+        if (preCountdownCount === 3) playSound(s3);
+        if (preCountdownCount === 2) playSound(s2);
+        if (preCountdownCount === 1) playSound(s1);
+
+        if (preCountdownCount <= 0) {
+            clearInterval(countdownInterval);
+
+            preCountdownActive = false;
+            preCountdownPaused = false;
+
+            go.currentTime = 0;
+            go.play().catch(() => { });
+
+            timeDisplay.textContent = "00:00:00";
+
+            preCountdownResolve();
+            return;
+        }
+
+        timeDisplay.textContent = preCountdownCount; // 👈 sin padStart
+
+    }, 1000);
+}
+
 // ==========================
-// WORKOUT FLOW
+// PAUSE / RESUME
+// ==========================
+function pausePreCountdown() {
+    if (!preCountdownActive || preCountdownPaused) return;
+
+    preCountdownPaused = true;
+    countdownPaused.textContent = "paused";
+}
+
+function resumePreCountdown() {
+    if (!preCountdownActive || !preCountdownPaused) return;
+
+    preCountdownPaused = false;
+    countdownPaused.textContent = "";
+}
+
+// ==========================
+// WORKOUT FLOW (INTACTO)
 // ==========================
 async function runWorkout(work, rest, rounds, sets, restSets) {
 
@@ -182,12 +227,13 @@ async function runWorkout(work, rest, rounds, sets, restSets) {
 
     phaseDisplay.textContent = "FINISHED";
     timeDisplay.textContent = "00:00:00";
+
     finish.currentTime = 0;
-    finish.play().catch(() => { });
+    finish.play().catch(() => {});
 }
 
 // ==========================
-// PHASE ENGINE
+// PHASE ENGINE (SIN CAMBIOS)
 // ==========================
 function runPhase(type, duration, round, set, isLastPhase) {
     return new Promise(resolve => {
@@ -197,30 +243,15 @@ function runPhase(type, duration, round, set, isLastPhase) {
         updatePhase(type, round, set);
         updateTime(time);
 
-        interval = setInterval(() => {
+        const interval = setInterval(() => {
 
             time--;
 
-            // 🔊 3-2-1 en últimos segundos
             if (time === 3) playSound(s3);
-            else if (time === 2) playSound(s2);
-            else if (time === 1) playSound(s1);
+            if (time === 2) playSound(s2);
+            if (time === 1) playSound(s1);
 
-            if (time === 0) {
-                updateTime(time);
-
-                if (isLastPhase) {
-                    clearInterval(interval);
-                    resolve();
-                    return;
-                }
-
-                clearInterval(interval);
-                resolve();
-                return;
-            }
-
-            if (time < 0) {
+            if (time <= 0) {
                 clearInterval(interval);
                 resolve();
                 return;

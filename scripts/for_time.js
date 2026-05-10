@@ -7,6 +7,7 @@ const errorMessage = document.getElementById("errorMessage");
 const setup = document.getElementById("setup");
 const countdownScreen = document.getElementById("countdownScreen");
 const countdownDisplay = document.getElementById("countdownDisplay");
+const countdownPaused = document.getElementById("countdownPaused");
 
 const timerScreen = document.getElementById("timerScreen");
 const timerDisplay = document.getElementById("timerDisplay");
@@ -22,6 +23,11 @@ const finish = new Audio("../sounds/finish.wav");
 
 let countdownInterval;
 let timerInterval;
+let preCountdownActive = false;
+let preCountdownPaused = false;
+let preCountdownCount = 0;
+let preCountdownResolve = null;
+let preCountdownParams = null;
 
 /* =========================
    LOAD SAVED VALUES
@@ -34,6 +40,30 @@ window.addEventListener("DOMContentLoaded", () => {
     inputs[0].value = savedHours;
     inputs[1].value = savedMinutes;
     inputs[2].value = savedSeconds;
+
+    document.body.addEventListener("click", event => {
+        if (!preCountdownActive) return;
+        if (event.target.closest("button")) return;
+
+        if (preCountdownPaused) {
+            resumePreCountdown();
+        } else {
+            pausePreCountdown();
+        }
+    });
+
+    window.addEventListener("keydown", event => {
+        if (!preCountdownActive) return;
+        if (event.code !== "Space") return;
+
+        event.preventDefault();
+
+        if (preCountdownPaused) {
+            resumePreCountdown();
+        } else {
+            pausePreCountdown();
+        }
+    });
 });
 
 /* =========================
@@ -96,31 +126,57 @@ function unlockAudio() {
    COUNTDOWN 10s
 ========================= */
 function startCountdown(totalSeconds, h, m, s) {
-    let count = totalSeconds;
+    preCountdownActive = true;
+    preCountdownPaused = false;
+    preCountdownCount = totalSeconds;
+    preCountdownParams = { h, m, s };
 
-    countdownDisplay.textContent = count;
+    countdownDisplay.textContent = preCountdownCount;
+    countdownPaused.textContent = "";
+    startCountdownInterval();
+}
 
+function startCountdownInterval() {
     countdownInterval = setInterval(() => {
-        count--;
+        preCountdownCount--;
 
         // 🔊 3-2-1 en countdown inicial
-        if (count === 3) playSound(s3);
-        if (count === 2) playSound(s2);
-        if (count === 1) playSound(s1);
+        if (preCountdownCount === 3) playSound(s3);
+        if (preCountdownCount === 2) playSound(s2);
+        if (preCountdownCount === 1) playSound(s1);
 
-        if (count <= 0) {
+        if (preCountdownCount <= 0) {
             clearInterval(countdownInterval);
+            preCountdownActive = false;
+            preCountdownPaused = false;
+            countdownPaused.textContent = "";
 
             go.currentTime = 0;
             go.play().catch(() => { });
 
-            startTimer(h, m, s);
+            startTimer(preCountdownParams.h, preCountdownParams.m, preCountdownParams.s);
             return;
         }
 
-        countdownDisplay.textContent = count;
+        countdownDisplay.textContent = preCountdownCount;
 
     }, 1000);
+}
+
+function pausePreCountdown() {
+    if (!preCountdownActive || preCountdownPaused) return;
+
+    clearInterval(countdownInterval);
+    preCountdownPaused = true;
+    countdownPaused.textContent = "paused";
+}
+
+function resumePreCountdown() {
+    if (!preCountdownActive || !preCountdownPaused) return;
+
+    preCountdownPaused = false;
+    countdownPaused.textContent = "";
+    startCountdownInterval();
 }
 
 /* =========================

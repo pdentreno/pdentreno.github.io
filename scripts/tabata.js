@@ -22,6 +22,10 @@ window.addEventListener("DOMContentLoaded", () => {
     finish: new Audio("../sounds/finish.wav"),
   };
 
+  Object.values(sounds).forEach((sound) => {
+    sound.volume = 1.0;
+  });
+
   const state = {
     isRunning: false,
     countdownInterval: null,

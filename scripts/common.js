@@ -20,6 +20,7 @@ function setupFullscreen(buttonId = "fullscreenBtn") {
 
 function unlockAudio() {
   const sound = new Audio("../sounds/beep.wav");
+  sound.volume = 1.0;
   sound.play()
     .then(() => {
       sound.pause();
@@ -30,6 +31,7 @@ function unlockAudio() {
 
 function playSound(sound) {
   const clone = sound.cloneNode();
+  clone.volume = sound.volume;
   clone.currentTime = 0;
   clone.play().catch(() => { });
 }

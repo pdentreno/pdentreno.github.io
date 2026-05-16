@@ -1,22 +1,17 @@
-setupFullscreen();// =========================
-// RELOJ
-// =========================
-function updateClock() {
-  const now = new Date();
+window.addEventListener("DOMContentLoaded", () => {
+  setupFullscreen();
 
-  const h = String(now.getHours()).padStart(2, "0");
-  const m = String(now.getMinutes()).padStart(2, "0");
-  const s = String(now.getSeconds()).padStart(2, "0");
+  const clockElement = document.getElementById("clock");
+  if (!clockElement) return;
 
-  document.getElementById("clock").textContent = `${h}:${m}:${s}`;
-}
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const s = String(now.getSeconds()).padStart(2, "0");
+    clockElement.textContent = `${h}:${m}:${s}`;
+  }
 
-// iniciar reloj
-updateClock();
-setInterval(updateClock, 1000);
-
-
-// =========================
-// FULLSCREEN (COMÚN)
-// =========================
-setupFullscreen();
+  updateClock();
+  setInterval(updateClock, 1000);
+});

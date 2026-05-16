@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>PD Timer</title>
 
   <link rel="stylesheet" href="styles/common.css">
   <link rel="stylesheet" href="styles/index.css">
@@ -14,20 +14,22 @@
 
   <main class="container">
 
-    <button onclick="window.location.href='pages/clock.html'">
+    <button data-target="pages/clock.html">
       CLOCK
     </button>
 
-    <button onclick="window.location.href='pages/tabata.html'">
+    <button data-target="pages/tabata.html">
       TABATA / EMOM
     </button>
 
-    <button onclick="window.location.href='pages/for_time.html'">
+    <button data-target="pages/for_time.html">
       FOR TIME / AMRAP
     </button>
 
   </main>
 
+  <script src="scripts/common.js" defer></script>
+  <script src="scripts/index.js" defer></script>
 </body>
 
 </html>

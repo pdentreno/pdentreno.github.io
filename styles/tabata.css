@@ -69,45 +69,9 @@
   text-align: left;
 }
 
-/* BOTÓN */
-.start-button {
-  padding: 16px 40px;
-
-  font-size: 20px;
-  font-weight: bold;
-
-  background: black;
-  color: #eb7628;
-
-  border: 2px solid #eb7628;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-  width: 95%;
-}
-
-.start-button:hover {
-  transform: scale(1.02);
-  background: #eb7628;
-  color: black;
-}
-
-/* ERROR */
-.error-message {
-  color: #ff4d4d;
-  font-size: 16px;
-  min-height: 20px;
-  text-align: center;
-}
-
 /* =========================
    TIMER SCREEN (CLAVE)
 ========================= */
-.hidden {
-  display: none !important;
-}
 
 /* 🔥 IMPORTANTE: mismo patrón que for_time */
 #timerScreen {

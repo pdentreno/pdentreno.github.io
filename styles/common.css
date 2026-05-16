@@ -1,111 +1,184 @@
-/* =========================
-   BASE GLOBAL
-========================= */
+:root {
+  --bg: #000;
+  --accent: #eb7628;
+  --accent-soft: rgba(235, 118, 40, 0.55);
+  --danger: #ff4d4d;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
   margin: 0;
-  height: 100vh;
-  background-color: black;
+  height: 100%;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--accent);
   font-family: Arial, sans-serif;
+}
+
+body {
   position: relative;
 }
 
-/* =========================
-   IMAGEN GLOBAL (RECTANGULAR)
-========================= */
 body::after {
   content: "";
   position: fixed;
   bottom: 0;
   right: 0;
-
   width: 180px;
   height: 110px;
   margin: 16px;
-
   background-image: url("../images/pd_3.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
   border-radius: 12px;
   opacity: 0.95;
-
   pointer-events: none;
 }
 
-/* =========================
-   BOTÓN VOLVER (IZQUIERDA)
-========================= */
 .back-button {
   position: absolute;
   top: 20px;
   left: 20px;
-
   text-decoration: none;
-
   background: black;
-  color: #eb7628;
-
-  border: 2px solid #eb7628;
-  border-radius: 8px;
-
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
   padding: 10px 14px;
   font-weight: bold;
-
   transition: 0.2s;
 }
 
 .back-button:hover {
   transform: scale(1.05);
-  background: #eb7628;
+  background: var(--accent);
   color: black;
 }
 
-/* =========================
-   TEXTO CENTRADO (HOLA)
-========================= */
 .top-center-text {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-
-  color: #eb7628;
+  color: var(--accent);
   font-weight: bold;
   font-size: 18px;
 }
 
-/* =========================
-   FULLSCREEN (DERECHA)
-========================= */
 .fullscreen-button {
   position: absolute;
   top: 20px;
   right: 20px;
-
   background: black;
-  color: #eb7628;
-
-  border: 2px solid #eb7628;
-  border-radius: 8px;
-
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
   padding: 10px 14px;
   font-size: 16px;
   font-weight: bold;
-
   cursor: pointer;
   transition: 0.2s;
 }
 
 .fullscreen-button:hover {
   transform: scale(1.05);
-  background: #eb7628;
+  background: var(--accent);
   color: black;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+button,
+input[type="number"] {
+  font: inherit;
+}
+
+input[type="number"] {
+  width: 100px;
+  padding: 15px;
+  font-size: 20px;
+  text-align: center;
+  background: black;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  outline: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.start-button {
+  padding: 16px 40px;
+  font-size: 20px;
+  font-weight: bold;
+  background: black;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: 0.2s;
+  width: 95%;
+}
+
+.start-button:hover {
+  transform: scale(1.02);
+  background: var(--accent);
+  color: black;
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 16px;
+  min-height: 20px;
+  text-align: center;
+}
+
+.timer-screen,
+.countdown-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+}
+
+#timerDisplay,
+#timeDisplay,
+#countdownDisplay {
+  font-size: 15vw;
+  font-weight: bold;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+#countdownPaused,
+#timerPaused {
+  min-height: 3vw;
+  font-size: 2.5vw;
+  color: var(--accent-soft);
+  font-style: italic;
+  text-align: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.08s ease;
+  will-change: opacity, visibility, transform;
+}
+
+#countdownPaused.visible,
+#timerPaused.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
 @media (max-width: 600px) {
   body::after {
     width: 130px;

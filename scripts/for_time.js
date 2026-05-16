@@ -1,314 +1,223 @@
-setupFullscreen();// =========================
-
-const startButton = document.querySelector(".start-button");
-const inputs = document.querySelectorAll(".time-row input");
-const errorMessage = document.getElementById("errorMessage");
-
-const setup = document.getElementById("setup");
-const countdownScreen = document.getElementById("countdownScreen");
-const countdownDisplay = document.getElementById("countdownDisplay");
-const countdownPaused = document.getElementById("countdownPaused");
-
-const timerScreen = document.getElementById("timerScreen");
-const timerDisplay = document.getElementById("timerDisplay");
-
-// 🔊 SOUNDS
-const beep = new Audio("../sounds/beep.wav");
-
-const s3 = new Audio("../sounds/countdown_3.wav");
-const s2 = new Audio("../sounds/countdown_2.wav");
-const s1 = new Audio("../sounds/countdown_1.wav");
-const go = new Audio("../sounds/go.wav");
-const finish = new Audio("../sounds/finish.wav");
-
-let countdownInterval;
-let timerInterval;
-let preCountdownActive = false;
-let preCountdownPaused = false;
-let preCountdownCount = 0;
-let preCountdownResolve = null;
-let preCountdownParams = null;
-
-let timerActive = false;
-let timerPaused = false;
-let timerTotal = 0;
-
-/* =========================
-   LOAD SAVED VALUES
-========================= */
 window.addEventListener("DOMContentLoaded", () => {
-    const savedHours = localStorage.getItem("fortime_hours") || "";
-    const savedMinutes = localStorage.getItem("fortime_minutes") || "";
-    const savedSeconds = localStorage.getItem("fortime_seconds") || "";
+  const elements = {
+    startButton: document.querySelector(".start-button"),
+    inputs: [...document.querySelectorAll(".time-row input")],
+    errorMessage: document.getElementById("errorMessage"),
+    setup: document.getElementById("setup"),
+    countdownScreen: document.getElementById("countdownScreen"),
+    countdownDisplay: document.getElementById("countdownDisplay"),
+    countdownPaused: document.getElementById("countdownPaused"),
+    timerScreen: document.getElementById("timerScreen"),
+    timerDisplay: document.getElementById("timerDisplay"),
+    timerPaused: document.getElementById("timerPaused"),
+  };
 
-    inputs[0].value = savedHours;
-    inputs[1].value = savedMinutes;
-    inputs[2].value = savedSeconds;
+  const sounds = {
+    s3: new Audio("../sounds/countdown_3.wav"),
+    s2: new Audio("../sounds/countdown_2.wav"),
+    s1: new Audio("../sounds/countdown_1.wav"),
+    go: new Audio("../sounds/go.wav"),
+    finish: new Audio("../sounds/finish.wav"),
+  };
 
-    document.body.addEventListener("click", event => {
-        if (!preCountdownActive && !timerActive) return;
-        if (event.target.closest("button")) return;
+  const state = {
+    countdownInterval: null,
+    timerInterval: null,
+    preCountdownActive: false,
+    preCountdownPaused: false,
+    preCountdownCount: 0,
+    preCountdownParams: null,
+    timerActive: false,
+    timerPaused: false,
+    timerTotal: 0,
+  };
 
-        if (preCountdownActive) {
-            if (preCountdownPaused) {
-                resumePreCountdown();
-            } else {
-                pausePreCountdown();
-            }
-        } else if (timerActive) {
-            if (timerPaused) {
-                resumeTimer();
-            } else {
-                pauseTimer();
-            }
-        }
+  setupFullscreen();
+  loadSavedValues();
+  attachEvents();
+
+  function attachEvents() {
+    elements.startButton.addEventListener("click", handleStartClick);
+
+    elements.inputs.forEach((input, index) => {
+      input.addEventListener("change", () => saveInput(index, input.value));
     });
 
-    window.addEventListener("keydown", event => {
-        if (!preCountdownActive && !timerActive) return;
-        if (event.code !== "Space") return;
-
-        event.preventDefault();
-
-        if (preCountdownActive) {
-            if (preCountdownPaused) {
-                resumePreCountdown();
-            } else {
-                pausePreCountdown();
-            }
-        } else if (timerActive) {
-            if (timerPaused) {
-                resumeTimer();
-            } else {
-                pauseTimer();
-            }
-        }
+    document.body.addEventListener("click", (event) => {
+      if (!state.preCountdownActive && !state.timerActive) return;
+      if (event.target.closest("button")) return;
+      togglePause();
     });
-});
 
-/* =========================
-   SAVE VALUES ON INPUT
-========================= */
-inputs.forEach((input) => {
-    input.addEventListener("change", () => {
-        localStorage.setItem("fortime_hours", inputs[0].value);
-        localStorage.setItem("fortime_minutes", inputs[1].value);
-        localStorage.setItem("fortime_seconds", inputs[2].value);
+    window.addEventListener("keydown", (event) => {
+      if (!state.preCountdownActive && !state.timerActive) return;
+      if (event.code !== "Space") return;
+      event.preventDefault();
+      togglePause();
     });
-});
+  }
 
-/* =========================
-   START
-========================= */
-startButton.addEventListener("click", () => {
+  function loadSavedValues() {
+    elements.inputs[0].value = localStorage.getItem("fortime_hours") || "";
+    elements.inputs[1].value = localStorage.getItem("fortime_minutes") || "";
+    elements.inputs[2].value = localStorage.getItem("fortime_seconds") || "";
+  }
 
+  function saveInput(index, value) {
+    const keys = ["fortime_hours", "fortime_minutes", "fortime_seconds"];
+    localStorage.setItem(keys[index], value);
+  }
+
+  function handleStartClick() {
     unlockAudio();
 
-    let hours = Number(inputs[0].value) || 0;
-    let minutes = Number(inputs[1].value) || 0;
-    let seconds = Number(inputs[2].value) || 0;
+    const hours = Number(elements.inputs[0].value) || 0;
+    const minutes = Number(elements.inputs[1].value) || 0;
+    const seconds = Number(elements.inputs[2].value) || 0;
 
-    errorMessage.textContent = "";
+    elements.errorMessage.textContent = "";
 
     if (hours < 0 || minutes < 0 || seconds < 0) {
-        errorMessage.textContent = "Values cannot be negative";
-        return;
+      elements.errorMessage.textContent = "Values cannot be negative";
+      return;
     }
 
     if (hours === 0 && minutes === 0 && seconds === 0) {
-        errorMessage.textContent = "Please enter a time greater than 0";
-        return;
+      elements.errorMessage.textContent = "Please enter a time greater than 0";
+      return;
     }
 
     const normalized = normalizeTime(hours, minutes, seconds);
 
-    setup.classList.add("hidden");
-    countdownScreen.classList.remove("hidden");
+    elements.setup.classList.add("hidden");
+    elements.countdownScreen.classList.remove("hidden");
 
     startCountdown(10, normalized.hours, normalized.minutes, normalized.seconds);
-});
+  }
 
-/* =========================
-   AUDIO UNLOCK (estable)
-========================= */
-function unlockAudio() {
-    const tempSound = new Audio("../sounds/beep.wav");
+  function togglePause() {
+    if (state.preCountdownActive) {
+      state.preCountdownPaused ? resumePreCountdown() : pausePreCountdown();
+      return;
+    }
 
-    tempSound.play()
-        .then(() => {
-            tempSound.pause();
-            tempSound.currentTime = 0;
-        })
-        .catch(() => { });
-}
+    if (state.timerActive) {
+      state.timerPaused ? resumeTimer() : pauseTimer();
+    }
+  }
 
-/* =========================
-   COUNTDOWN 10s
-========================= */
-function startCountdown(totalSeconds, h, m, s) {
-    preCountdownActive = true;
-    preCountdownPaused = false;
-    preCountdownCount = totalSeconds;
-    preCountdownParams = { h, m, s };
+  function startCountdown(totalSeconds, h, m, s) {
+    state.preCountdownActive = true;
+    state.preCountdownPaused = false;
+    state.preCountdownCount = totalSeconds;
+    state.preCountdownParams = { h, m, s };
 
-    countdownDisplay.textContent = preCountdownCount;
-    countdownPaused.textContent = "";
+    elements.countdownDisplay.textContent = formatCountdownValue(state.preCountdownCount);
+    elements.countdownPaused.textContent = "";
+    elements.countdownPaused.classList.remove("visible");
+
     startCountdownInterval();
-}
+  }
 
-function startCountdownInterval() {
-    countdownInterval = setInterval(() => {
-        preCountdownCount--;
+  function startCountdownInterval() {
+    state.countdownInterval = setInterval(() => {
+      state.preCountdownCount--;
 
-        // 🔊 3-2-1 en countdown inicial
-        if (preCountdownCount === 3) playSound(s3);
-        if (preCountdownCount === 2) playSound(s2);
-        if (preCountdownCount === 1) playSound(s1);
+      if (state.preCountdownCount === 3) playSound(sounds.s3);
+      if (state.preCountdownCount === 2) playSound(sounds.s2);
+      if (state.preCountdownCount === 1) playSound(sounds.s1);
 
-        if (preCountdownCount <= 0) {
-            clearInterval(countdownInterval);
-            preCountdownActive = false;
-            preCountdownPaused = false;
-            countdownPaused.textContent = "";
+      if (state.preCountdownCount <= 0) {
+        clearInterval(state.countdownInterval);
+        state.preCountdownActive = false;
+        state.preCountdownPaused = false;
+        elements.countdownPaused.textContent = "";
+        elements.countdownPaused.classList.remove("visible");
 
-            go.currentTime = 0;
-            go.play().catch(() => { });
+        playSound(sounds.go);
+        startTimer(state.preCountdownParams.h, state.preCountdownParams.m, state.preCountdownParams.s);
+        return;
+      }
 
-            startTimer(preCountdownParams.h, preCountdownParams.m, preCountdownParams.s);
-            return;
-        }
-
-        countdownDisplay.textContent = preCountdownCount;
-
+      elements.countdownDisplay.textContent = formatCountdownValue(state.preCountdownCount);
     }, 1000);
-}
+  }
 
-function pausePreCountdown() {
-    if (!preCountdownActive || preCountdownPaused) return;
+  function pausePreCountdown() {
+    if (!state.preCountdownActive || state.preCountdownPaused) return;
 
-    clearInterval(countdownInterval);
-    preCountdownPaused = true;
-    countdownPaused.textContent = "PAUSED";
-    countdownPaused.classList.add("visible");
-}
+    clearInterval(state.countdownInterval);
+    state.preCountdownPaused = true;
+    elements.countdownPaused.textContent = "PAUSED";
+    elements.countdownPaused.classList.add("visible");
+  }
 
-function resumePreCountdown() {
-    if (!preCountdownActive || !preCountdownPaused) return;
+  function resumePreCountdown() {
+    if (!state.preCountdownActive || !state.preCountdownPaused) return;
 
-    preCountdownPaused = false;
-    countdownPaused.textContent = "";
+    state.preCountdownPaused = false;
+    elements.countdownPaused.textContent = "";
+    elements.countdownPaused.classList.remove("visible");
     startCountdownInterval();
-}
+  }
 
-/* =========================
-   TIMER PAUSE/RESUME
-========================= */
-function pauseTimer() {
-    if (!timerActive || timerPaused) return;
+  function pauseTimer() {
+    if (!state.timerActive || state.timerPaused) return;
 
-    timerPaused = true;
-    const timerPausedElement = document.getElementById("timerPaused");
-    if (timerPausedElement) {
-        timerPausedElement.textContent = "PAUSED";
-        timerPausedElement.classList.add("visible");
-    }
-}
+    state.timerPaused = true;
+    elements.timerPaused.textContent = "PAUSED";
+    elements.timerPaused.classList.add("visible");
+  }
 
-function resumeTimer() {
-    if (!timerActive || !timerPaused) return;
+  function resumeTimer() {
+    if (!state.timerActive || !state.timerPaused) return;
 
-    timerPaused = false;
-    const timerPausedElement = document.getElementById("timerPaused");
-    if (timerPausedElement) {
-        timerPausedElement.textContent = "";
-        timerPausedElement.classList.remove("visible");
-        // force repaint for Safari
-        void timerPausedElement.offsetHeight;
-    }
-}
+    state.timerPaused = false;
+    elements.timerPaused.textContent = "";
+    elements.timerPaused.classList.remove("visible");
+  }
 
-/* =========================
-   TIMER
-========================= */
-function startTimer(h, m, s) {
-    countdownScreen.classList.add("hidden");
-    timerScreen.classList.remove("hidden");
+  function startTimer(h, m, s) {
+    elements.countdownScreen.classList.add("hidden");
+    elements.timerScreen.classList.remove("hidden");
 
-    timerActive = true;
-    timerPaused = false;
-    timerTotal = h * 3600 + m * 60 + s;
+    state.timerActive = true;
+    state.timerPaused = false;
+    state.timerTotal = h * 3600 + m * 60 + s;
 
-    updateDisplay(timerTotal);
+    updateDisplay(state.timerTotal);
     startTimerInterval();
-}
+  }
 
-function startTimerInterval() {
-    timerInterval = setInterval(() => {
-        if (timerPaused) return; // No decrementar si está pausado
+  function startTimerInterval() {
+    state.timerInterval = setInterval(() => {
+      if (state.timerPaused) return;
 
-        timerTotal--;
+      state.timerTotal--;
 
-        // 🔊 3-2-1 en últimos segundos del TIMER
-        if (timerTotal === 3) playSound(s3);
-        if (timerTotal === 2) playSound(s2);
-        if (timerTotal === 1) playSound(s1);
+      if (state.timerTotal === 3) playSound(sounds.s3);
+      if (state.timerTotal === 2) playSound(sounds.s2);
+      if (state.timerTotal === 1) playSound(sounds.s1);
 
-        if (timerTotal <= 0) {
-            clearInterval(timerInterval);
-            timerActive = false;
-            timerPaused = false;
+      if (state.timerTotal <= 0) {
+        clearInterval(state.timerInterval);
+        state.timerActive = false;
+        state.timerPaused = false;
+        elements.timerPaused.textContent = "";
+        elements.timerPaused.classList.remove("visible");
+        updateDisplay(0);
+        playSound(sounds.finish);
+        return;
+      }
 
-            updateDisplay(0);
-
-            finish.currentTime = 0;
-            finish.play().catch(() => { });
-
-            return;
-        }
-
-        updateDisplay(timerTotal);
-
+      updateDisplay(state.timerTotal);
     }, 1000);
-}
+  }
 
-/* =========================
-   DISPLAY
-========================= */
-function updateDisplay(total) {
+  function updateDisplay(total) {
     const h = Math.floor(total / 3600);
     const m = Math.floor((total % 3600) / 60);
     const s = total % 60;
-
-    timerDisplay.textContent = formatTime(h, m, s);
-}
-
-/* =========================
-   SAFE PLAY
-========================= */
-function playSound(sound) {
-    const clone = sound.cloneNode();
-    clone.currentTime = 0;
-    clone.play().catch(() => { });
-}
-
-/* =========================
-   NORMALIZE TIME
-========================= */
-function normalizeTime(h, m, s) {
-    let total = h * 3600 + m * 60 + s;
-
-    const hours = Math.floor(total / 3600);
-    total %= 3600;
-
-    const minutes = Math.floor(total / 60);
-    const seconds = total % 60;
-
-    return { hours, minutes, seconds };
-}
-
-/* =========================
-   FORMAT TIME
-========================= */
-function formatTime(h, m, s) {
-    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
+    elements.timerDisplay.textContent = formatTime(h, m, s);
+  }
+});

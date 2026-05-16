@@ -63,38 +63,6 @@
   text-align: left;
 }
 
-/* START BUTTON */
-.start-button {
-  padding: 16px 40px;
-
-  font-size: 20px;
-  font-weight: bold;
-
-  background: black;
-  color: #eb7628;
-
-  border: 2px solid #eb7628;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-  width: 95%;
-}
-
-.start-button:hover {
-  background: #eb7628;
-  color: black;
-}
-
-/* ERROR */
-.error-message {
-  color: #ff4d4d;
-  font-size: 16px;
-  min-height: 20px;
-  text-align: center;
-}
-
 /* =========================
    COUNTDOWN
 ========================= */
@@ -112,40 +80,4 @@
   font-size: 15vw;
   font-weight: bold;
   color: #eb7628;
-}
-
-#countdownPaused,
-#timerPaused {
-  min-height: 3vw;
-  font-size: 2.5vw;
-  color: rgba(235, 118, 40, 0.55);
-  font-style: italic;
-  text-align: center;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.08s ease;
-  will-change: opacity, visibility, transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-#countdownPaused.visible,
-#timerPaused.visible {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* TIMER */
-#timerDisplay {
-  font-size: 15vw;
-  font-weight: bold;
-  color: #eb7628;
-
-  font-variant-numeric: tabular-nums;
-}
-
-
-/* OCULTO */
-.hidden {
-  display: none !important;
 }

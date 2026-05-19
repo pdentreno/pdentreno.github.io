@@ -57,7 +57,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     document.body.addEventListener("click", (event) => {
       if (!state.preCountdownActive && !state.phaseActive) return;
-      if (event.target.closest("button")) return;
+      if (
+        event.target.closest("button") ||
+        event.target.closest("a") ||
+        event.target.closest("input")
+      ) return;
+
       togglePause();
     });
 

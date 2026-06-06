@@ -10,6 +10,14 @@ window.addEventListener("DOMContentLoaded", () => {
     timerScreen: document.getElementById("timerScreen"),
     timerDisplay: document.getElementById("timerDisplay"),
     timerPaused: document.getElementById("timerPaused"),
+    editBtn: document.getElementById("editBtn"),
+    editOverlay: document.getElementById("editOverlay"),
+    editHours: document.getElementById("editHours"),
+    editMinutes: document.getElementById("editMinutes"),
+    editSeconds: document.getElementById("editSeconds"),
+    confirmEditBtn: document.getElementById("confirmEditBtn"),
+    cancelEditBtn: document.getElementById("cancelEditBtn"),
+    editErrorMessage: document.getElementById("editErrorMessage"),
   };
 
   const sounds = {
@@ -34,6 +42,7 @@ window.addEventListener("DOMContentLoaded", () => {
     timerActive: false,
     timerPaused: false,
     timerTotal: 0,
+    editOverlayOpen: false,
   };
 
   setupFullscreen();
@@ -42,6 +51,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function attachEvents() {
     elements.startButton.addEventListener("click", handleStartClick);
+    elements.editBtn.addEventListener("click", openEditOverlay);
+    elements.confirmEditBtn.addEventListener("click", handleConfirmEdit);
+    elements.cancelEditBtn.addEventListener("click", closeEditOverlay);
 
     elements.inputs.forEach((input, index) => {
       input.addEventListener("change", () => saveInput(index, input.value));
@@ -112,6 +124,47 @@ window.addEventListener("DOMContentLoaded", () => {
     if (state.timerActive) {
       state.timerPaused ? resumeTimer() : pauseTimer();
     }
+  }
+
+  function openEditOverlay() {
+    if (!state.timerActive || state.editOverlayOpen) return;
+
+    const hours = Math.floor(state.timerTotal / 3600);
+    const minutes = Math.floor((state.timerTotal % 3600) / 60);
+    const seconds = state.timerTotal % 60;
+
+    elements.editHours.value = hours;
+    elements.editMinutes.value = minutes;
+    elements.editSeconds.value = seconds;
+    elements.editErrorMessage.textContent = "";
+
+    state.editOverlayOpen = true;
+    elements.editOverlay.classList.remove("hidden");
+  }
+
+  function closeEditOverlay() {
+    if (!state.editOverlayOpen) return;
+
+    state.editOverlayOpen = false;
+    elements.editOverlay.classList.add("hidden");
+    elements.editErrorMessage.textContent = "";
+  }
+
+  function handleConfirmEdit() {
+    const hours = Number(elements.editHours.value) || 0;
+    const minutes = Number(elements.editMinutes.value) || 0;
+    const seconds = Number(elements.editSeconds.value) || 0;
+    const normalized = normalizeTime(hours, minutes, seconds);
+    const total = normalized.hours * 3600 + normalized.minutes * 60 + normalized.seconds;
+
+    if (total <= 0) {
+      elements.editErrorMessage.textContent = "Please enter a time greater than 0";
+      return;
+    }
+
+    state.timerTotal = total;
+    updateDisplay(state.timerTotal);
+    closeEditOverlay(true);
   }
 
   function startCountdown(totalSeconds, h, m, s) {
@@ -194,6 +247,7 @@ window.addEventListener("DOMContentLoaded", () => {
     state.timerTotal = h * 3600 + m * 60 + s;
 
     updateDisplay(state.timerTotal);
+    elements.editBtn.classList.remove("hidden");
     startTimerInterval();
   }
 
@@ -213,6 +267,8 @@ window.addEventListener("DOMContentLoaded", () => {
         state.timerPaused = false;
         elements.timerPaused.textContent = "";
         elements.timerPaused.classList.remove("visible");
+        elements.editBtn.classList.add("hidden");
+        closeEditOverlay(false);
         updateDisplay(0);
         playSound(sounds.finish);
         return;

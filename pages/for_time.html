@@ -21,6 +21,7 @@
 
   <!-- FULLSCREEN -->
   <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
+  <button class="fullscreen-button edit-button hidden" id="editBtn">EDIT</button>
 
   <main class="container">
 
@@ -60,6 +61,18 @@
 
     <!-- TIMER -->
     <div class="timer-screen hidden" id="timerScreen">
+      <div class="edit-panel hidden" id="editOverlay">
+        <div class="edit-row">
+          <input type="number" min="0" id="editHours" placeholder="hh">
+          <input type="number" min="0" id="editMinutes" placeholder="mm">
+          <input type="number" min="0" id="editSeconds" placeholder="ss">
+        </div>
+        <div class="edit-actions">
+          <button class="start-button" id="confirmEditBtn">CONFIRM</button>
+          <button class="start-button" id="cancelEditBtn">CANCEL</button>
+        </div>
+        <div class="edit-error-message" id="editErrorMessage"></div>
+      </div>
       <div id="timerDisplay">00:00:00</div>
       <div id="timerPaused"></div>
     </div>

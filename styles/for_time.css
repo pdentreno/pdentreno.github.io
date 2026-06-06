@@ -81,3 +81,51 @@
   font-weight: bold;
   color: #eb7628;
 }
+
+.edit-button {
+  right: 120px;
+}
+
+.edit-panel {
+  width: min(560px, 100%);
+  background: rgba(0, 0, 0, 0.92);
+  border: 2px solid #eb7628;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.edit-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.edit-row input {
+  width: 100%;
+  max-width: 130px;
+  padding: 14px;
+  font-size: 18px;
+  text-align: center;
+  background: black;
+  color: #eb7628;
+  border: 2px solid #eb7628;
+  border-radius: 10px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.edit-error-message {
+  color: #ff4d4d;
+  font-size: 16px;
+  text-align: center;
+  min-height: 24px;
+}

@@ -21,6 +21,7 @@
 
   <!-- Fullscreen -->
   <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
+  <button class="fullscreen-button edit-button hidden" id="editBtn">EDIT</button>
 
   <main class="container">
 
@@ -73,6 +74,40 @@
       <div id="timeDisplay">00:00:00</div>
 
       <div id="phaseDisplay"></div>
+
+      <div class="edit-panel hidden" id="editOverlay">
+        <div class="edit-row">
+          <div class="edit-field">
+            <span>WORK</span>
+            <input type="number" min="1" id="editWork" placeholder="seconds">
+          </div>
+          <div class="edit-field">
+            <span>REST</span>
+            <input type="number" min="0" id="editRest" placeholder="seconds">
+          </div>
+        </div>
+        <div class="edit-row">
+          <div class="edit-field">
+            <span>ROUNDS</span>
+            <input type="number" min="1" id="editRounds" placeholder="0">
+          </div>
+          <div class="edit-field">
+            <span>SETS</span>
+            <input type="number" min="1" id="editSets" placeholder="0">
+          </div>
+        </div>
+        <div class="edit-row">
+          <div class="edit-field">
+            <span>REST SETS</span>
+            <input type="number" min="0" id="editRestSets" placeholder="seconds">
+          </div>
+        </div>
+        <div class="edit-actions">
+          <button class="start-button" id="confirmEditBtn">CONFIRM</button>
+          <button class="start-button" id="cancelEditBtn">CANCEL</button>
+        </div>
+        <div class="edit-error-message" id="editErrorMessage"></div>
+      </div>
 
       <!-- PAUSED (correctamente ubicado como en for_time) -->
       <div id="countdownPaused"></div>

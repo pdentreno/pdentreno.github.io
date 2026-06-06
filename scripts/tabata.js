@@ -12,6 +12,16 @@ window.addEventListener("DOMContentLoaded", () => {
     timeDisplay: document.getElementById("timeDisplay"),
     errorMessage: document.getElementById("errorMessage"),
     countdownPaused: document.getElementById("countdownPaused"),
+    editBtn: document.getElementById("editBtn"),
+    editOverlay: document.getElementById("editOverlay"),
+    editWork: document.getElementById("editWork"),
+    editRest: document.getElementById("editRest"),
+    editRounds: document.getElementById("editRounds"),
+    editSets: document.getElementById("editSets"),
+    editRestSets: document.getElementById("editRestSets"),
+    confirmEditBtn: document.getElementById("confirmEditBtn"),
+    cancelEditBtn: document.getElementById("cancelEditBtn"),
+    editErrorMessage: document.getElementById("editErrorMessage"),
   };
 
   const sounds = {
@@ -36,6 +46,14 @@ window.addEventListener("DOMContentLoaded", () => {
     phaseActive: false,
     phasePaused: false,
     phaseRemaining: 0,
+    editOverlayOpen: false,
+    currentWorkout: {
+      work: 0,
+      rest: 0,
+      rounds: 0,
+      sets: 0,
+      restSets: 0,
+    },
   };
 
   setupFullscreen();
@@ -44,6 +62,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function attachEvents() {
     elements.startButton.addEventListener("click", handleStartClick);
+    elements.editBtn.addEventListener("click", openEditOverlay);
+    elements.confirmEditBtn.addEventListener("click", handleConfirmEdit);
+    elements.cancelEditBtn.addEventListener("click", closeEditOverlay);
 
     [
       [elements.workInput, "tabata_work"],
@@ -109,11 +130,16 @@ window.addEventListener("DOMContentLoaded", () => {
     elements.timerScreen.classList.remove("hidden");
 
     state.isRunning = true;
+    state.currentWorkout = { work, rest, rounds, sets, restSets };
 
     startPreCountdown()
-      .then(() => runWorkout(work, rest, rounds, sets, restSets))
+      .then(() => {
+        elements.editBtn.classList.remove("hidden");
+        return runWorkout();
+      })
       .finally(() => {
         state.isRunning = false;
+        elements.editBtn.classList.add("hidden");
       });
   }
 
@@ -126,6 +152,66 @@ window.addEventListener("DOMContentLoaded", () => {
     if (state.phaseActive) {
       state.phasePaused ? resumePhase() : pausePhase();
     }
+  }
+
+  function openEditOverlay() {
+    if (!state.isRunning || state.preCountdownActive) return;
+    if (state.editOverlayOpen) {
+      closeEditOverlay();
+      return;
+    }
+
+    elements.editWork.value = state.currentWorkout.work;
+    elements.editRest.value = state.currentWorkout.rest;
+    elements.editRounds.value = state.currentWorkout.rounds;
+    elements.editSets.value = state.currentWorkout.sets;
+    elements.editRestSets.value = state.currentWorkout.restSets;
+    elements.editErrorMessage.textContent = "";
+
+    state.editOverlayOpen = true;
+    elements.editOverlay.classList.remove("hidden");
+  }
+
+  function closeEditOverlay() {
+    if (!state.editOverlayOpen) return;
+
+    state.editOverlayOpen = false;
+    elements.editOverlay.classList.add("hidden");
+    elements.editErrorMessage.textContent = "";
+  }
+
+  function handleConfirmEdit() {
+    const work = Number(elements.editWork.value);
+    const rest = Number(elements.editRest.value);
+    const rounds = Number(elements.editRounds.value);
+    const sets = Number(elements.editSets.value);
+    const restSets = Number(elements.editRestSets.value);
+
+    if (
+      !isValid(work, true) ||
+      !isValid(rest, false) ||
+      !isValid(rounds, true) ||
+      !isValid(sets, true) ||
+      !isValid(restSets, false)
+    ) {
+      elements.editErrorMessage.textContent = "Enter valid values (positive integers)";
+      return;
+    }
+
+    state.currentWorkout = { work, rest, rounds, sets, restSets };
+    elements.workInput.value = work;
+    elements.restInput.value = rest;
+    elements.roundsInput.value = rounds;
+    elements.setsInput.value = sets;
+    elements.restSetsInput.value = restSets;
+
+    localStorage.setItem("tabata_work", work);
+    localStorage.setItem("tabata_rest", rest);
+    localStorage.setItem("tabata_rounds", rounds);
+    localStorage.setItem("tabata_sets", sets);
+    localStorage.setItem("tabata_restSets", restSets);
+
+    closeEditOverlay();
   }
 
   function startPreCountdown() {
@@ -193,24 +279,25 @@ window.addEventListener("DOMContentLoaded", () => {
     elements.countdownPaused.classList.remove("visible");
   }
 
-  async function runWorkout(work, rest, rounds, sets, restSets) {
-    for (let set = 1; set <= sets; set++) {
-      for (let round = 1; round <= rounds; round++) {
-        const isLastPhase = set === sets && round === rounds;
-        await runPhase("WORK", work, round, set, isLastPhase);
+  async function runWorkout() {
+    for (let set = 1; set <= state.currentWorkout.sets; set++) {
+      for (let round = 1; round <= state.currentWorkout.rounds; round++) {
+        const isLastPhase = set === state.currentWorkout.sets && round === state.currentWorkout.rounds;
+        await runPhase("WORK", state.currentWorkout.work, round, set, isLastPhase);
 
-        if (rest > 0 && round < rounds) {
-          await runPhase("REST", rest, round, set, false);
+        if (state.currentWorkout.rest > 0 && round < state.currentWorkout.rounds) {
+          await runPhase("REST", state.currentWorkout.rest, round, set, false);
         }
       }
 
-      if (restSets > 0 && set < sets) {
-        await runPhase("REST BETWEEN SETS", restSets, 0, set, false);
+      if (state.currentWorkout.restSets > 0 && set < state.currentWorkout.sets) {
+        await runPhase("REST BETWEEN SETS", state.currentWorkout.restSets, 0, set, false);
       }
     }
 
     elements.phaseDisplay.textContent = "FINISHED";
     elements.timeDisplay.textContent = "00:00:00";
+    elements.editBtn.classList.add("hidden");
     playSound(sounds.finish);
   }
 

@@ -45,6 +45,7 @@ body::after {
   position: absolute;
   top: 20px;
   left: 20px;
+  z-index: 20;
   text-decoration: none;
   background: black;
   color: var(--accent);
@@ -75,6 +76,7 @@ body::after {
   position: absolute;
   top: 20px;
   right: 20px;
+  z-index: 20;
   background: black;
   color: var(--accent);
   border: 2px solid var(--accent);

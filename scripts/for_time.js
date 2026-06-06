@@ -127,7 +127,11 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function openEditOverlay() {
-    if (!state.timerActive || state.editOverlayOpen) return;
+    if (!state.timerActive) return;
+    if (state.editOverlayOpen) {
+      closeEditOverlay();
+      return;
+    }
 
     const hours = Math.floor(state.timerTotal / 3600);
     const minutes = Math.floor((state.timerTotal % 3600) / 60);

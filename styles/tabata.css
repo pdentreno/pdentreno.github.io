@@ -94,7 +94,6 @@
 }
 
 .edit-panel {
-  pointer-events: auto;
   width: min(560px, 100%);
   background: rgba(0, 0, 0, 0.92);
   border: none;
@@ -104,11 +103,7 @@
   flex-direction: column;
   gap: 16px;
   align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
+  margin-bottom: 10px;
 }
 
 .edit-row {
@@ -116,22 +111,26 @@
   justify-content: center;
   gap: 12px;
   width: 100%;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 .edit-field {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: min(260px, 100%);
+  gap: 10px;
+  flex: 1 1 90px;
+  min-width: 90px;
+  max-width: 120px;
 }
 
 .edit-field span {
-  font-size: 14px;
   color: #eb7628;
   font-weight: bold;
+  font-size: 14px;
   letter-spacing: 1px;
+  text-transform: uppercase;
   text-align: center;
 }
 

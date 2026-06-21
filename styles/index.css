@@ -12,6 +12,17 @@ body {
   width: 350px;
 }
 
+.page-title {
+  margin: 0 0 32px;
+  font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+  white-space: nowrap;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #eb7628;
+  text-align: center;
+  text-shadow: 0 0 16px rgba(235, 118, 40, 0.24);
+}
+
 /* Botones */
 button {
   width: 100%;

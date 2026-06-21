@@ -1,0 +1,75 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.timer-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 18px;
+    min-height: 100%;
+}
+
+#cronoDisplay {
+    display: inline-block;
+    width: 12ch;
+    margin: 0 auto;
+    font-family: inherit;
+    font-size: 14vw;
+    font-weight: bold;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    text-align: center;
+    white-space: nowrap;
+}
+
+.crono-format {
+    font-size: 1rem;
+    color: var(--accent-soft);
+    text-align: center;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    margin-top: -24px;
+}
+
+#resetBtn {
+    width: auto;
+    padding: 14px 22px;
+    font-size: 16px;
+    background: black;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#resetBtn:hover {
+    background: var(--accent);
+    color: black;
+}
+
+@media (max-width: 600px) {
+    #cronoDisplay {
+        font-size: 18vw;
+    }
+
+    #resetBtn {
+        width: 100%;
+    }
+}

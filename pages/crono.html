@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PD Timer</title>
+
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/crono.css">
+</head>
+
+<body>
+
+    <!-- Botón volver -->
+    <a class="back-button" href="../index.html">← BACK</a>
+
+    <!-- CENTRO -->
+    <div class="top-center-text">CRONO</div>
+
+    <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
+
+    <main class="container">
+        <div class="timer-screen" id="cronoScreen">
+            <div id="cronoDisplay">00:00:00:000</div>
+            <div class="crono-format">hh:mm:ss:ms</div>
+            <div class="control-row">
+                <button class="start-button" id="resetBtn">RESET</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../scripts/common.js" defer></script>
+    <script src="../scripts/crono.js" defer></script>
+
+</body>
+
+</html>

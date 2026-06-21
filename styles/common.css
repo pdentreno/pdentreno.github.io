@@ -208,7 +208,6 @@ input[type="number"] {
 
 @media (max-width: 600px) {
   body::after {
-    width: 130px;
-    height: 80px;
+    display: none;
   }
 }

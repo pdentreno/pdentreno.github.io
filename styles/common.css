@@ -91,7 +91,7 @@ body::after {
   transform: translateX(-50%);
   color: var(--accent);
   font-weight: bold;
-  font-size: 18px;
+  font-size: 40px;
 }
 
 .fullscreen-button {

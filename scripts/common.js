@@ -31,22 +31,27 @@ function setupFullscreen(buttonId = "fullscreenBtn") {
   });
 }
 
-function unlockAudio() {
-  const sound = new Audio("../sounds/beep.wav");
-  sound.volume = 1.0;
-  sound.play()
-    .then(() => {
-      sound.pause();
-      sound.currentTime = 0;
-    })
-    .catch(() => { });
+function unlockAudio(sounds) {
+  Object.values(sounds).forEach((sound) => {
+    sound.muted = true;
+    sound.play()
+      .then(() => {
+        sound.pause();
+        sound.currentTime = 0;
+        sound.muted = false;
+      })
+      .catch((error) => {
+        sound.muted = false;
+        console.error("Unable to enable timer audio:", error);
+      });
+  });
 }
 
 function playSound(sound) {
-  const clone = sound.cloneNode();
-  clone.volume = sound.volume;
-  clone.currentTime = 0;
-  clone.play().catch(() => { });
+  sound.currentTime = 0;
+  sound.play().catch((error) => {
+    console.error("Unable to play timer audio:", error);
+  });
 }
 
 function formatTime(h, m, s) {

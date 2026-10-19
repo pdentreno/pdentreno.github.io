@@ -107,7 +107,7 @@ window.addEventListener("DOMContentLoaded", () => {
   function handleStartClick() {
     if (state.isRunning) return;
 
-    unlockAudio();
+    unlockAudio(sounds);
     elements.errorMessage.textContent = "";
 
     const work = Number(elements.workInput.value);

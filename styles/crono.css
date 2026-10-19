@@ -65,6 +65,14 @@
 }
 
 @media (max-width: 600px) {
+    main.timer-stage.container {
+        padding: 132px 12px 92px;
+    }
+
+    #cronoDisplay {
+        font-size: min(12vw, 24vh, 32rem);
+    }
+
     .crono-format {
         font-size: clamp(0.68rem, 1.3vw, 0.86rem);
         color: var(--muted);
@@ -80,5 +88,10 @@
 
     #resetBtn {
         width: 100%;
+    }
+
+    .control-row {
+        top: calc(50% + clamp(7rem, 25vw, 9rem));
+        padding: 0 24px;
     }
 }

@@ -90,7 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleStartClick() {
-    unlockAudio();
+    unlockAudio(sounds);
 
     const hours = Number(elements.inputs[0].value) || 0;
     const minutes = Number(elements.inputs[1].value) || 0;

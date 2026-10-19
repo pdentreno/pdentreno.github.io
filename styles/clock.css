@@ -7,17 +7,3 @@
   justify-content: center;
   align-items: center;
 }
-
-/* =========================
-   RELOJ
-========================= */
-#clock {
-  font-size: 20vw;
-  font-weight: bold;
-  color: #eb7628;
-  letter-spacing: 2px;
-
-  font-variant-numeric: tabular-nums;
-
-  white-space: nowrap;
-}

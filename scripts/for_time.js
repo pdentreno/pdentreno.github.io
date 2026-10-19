@@ -72,6 +72,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("keydown", (event) => {
       if (!state.preCountdownActive && !state.timerActive) return;
       if (event.code !== "Space") return;
+      if (event.target.closest("button, a, input, select, textarea, [contenteditable='true']")) return;
       event.preventDefault();
       togglePause();
     });
@@ -98,12 +99,12 @@ window.addEventListener("DOMContentLoaded", () => {
     elements.errorMessage.textContent = "";
 
     if (hours < 0 || minutes < 0 || seconds < 0) {
-      elements.errorMessage.textContent = "Values cannot be negative";
+      elements.errorMessage.textContent = "El tiempo no puede ser negativo.";
       return;
     }
 
     if (hours === 0 && minutes === 0 && seconds === 0) {
-      elements.errorMessage.textContent = "Please enter a time greater than 0";
+      elements.errorMessage.textContent = "Introduce un tiempo mayor que cero.";
       return;
     }
 
@@ -162,7 +163,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const total = normalized.hours * 3600 + normalized.minutes * 60 + normalized.seconds;
 
     if (total <= 0) {
-      elements.editErrorMessage.textContent = "Please enter a time greater than 0";
+      elements.editErrorMessage.textContent = "Introduce un tiempo mayor que cero.";
       return;
     }
 
@@ -213,7 +214,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     clearInterval(state.countdownInterval);
     state.preCountdownPaused = true;
-    elements.countdownPaused.textContent = "PAUSED";
+    elements.countdownPaused.textContent = "PAUSADO";
     elements.countdownPaused.classList.add("visible");
   }
 
@@ -230,7 +231,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!state.timerActive || state.timerPaused) return;
 
     state.timerPaused = true;
-    elements.timerPaused.textContent = "PAUSED";
+    elements.timerPaused.textContent = "PAUSADO";
     elements.timerPaused.classList.add("visible");
   }
 

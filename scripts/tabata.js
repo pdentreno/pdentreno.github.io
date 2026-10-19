@@ -90,6 +90,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("keydown", (event) => {
       if (!state.preCountdownActive && !state.phaseActive) return;
       if (event.code !== "Space") return;
+      if (event.target.closest("button, a, input, select, textarea, [contenteditable='true']")) return;
       event.preventDefault();
       togglePause();
     });
@@ -122,7 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
       !isValid(sets, true) ||
       !isValid(restSets, false)
     ) {
-      elements.errorMessage.textContent = "Enter valid values (positive integers)";
+      elements.errorMessage.textContent = "Introduce valores válidos (números enteros positivos).";
       return;
     }
 
@@ -194,7 +195,7 @@ window.addEventListener("DOMContentLoaded", () => {
       !isValid(sets, true) ||
       !isValid(restSets, false)
     ) {
-      elements.editErrorMessage.textContent = "Enter valid values (positive integers)";
+      elements.editErrorMessage.textContent = "Introduce valores válidos (números enteros positivos).";
       return;
     }
 
@@ -254,7 +255,7 @@ window.addEventListener("DOMContentLoaded", () => {
   function pausePreCountdown() {
     if (!state.preCountdownActive || state.preCountdownPaused) return;
     state.preCountdownPaused = true;
-    elements.countdownPaused.textContent = "PAUSED";
+    elements.countdownPaused.textContent = "PAUSADO";
     elements.countdownPaused.classList.add("visible");
   }
 
@@ -268,7 +269,7 @@ window.addEventListener("DOMContentLoaded", () => {
   function pausePhase() {
     if (!state.phaseActive || state.phasePaused) return;
     state.phasePaused = true;
-    elements.countdownPaused.textContent = "PAUSED";
+    elements.countdownPaused.textContent = "PAUSADO";
     elements.countdownPaused.classList.add("visible");
   }
 
@@ -295,7 +296,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    elements.phaseDisplay.textContent = "FINISHED";
+    elements.phaseDisplay.textContent = "FINALIZADO";
     elements.timeDisplay.textContent = "00:00:00";
     elements.editBtn.classList.add("hidden");
     playSound(sounds.finish);
@@ -346,9 +347,10 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     if (type === "REST BETWEEN SETS") {
-      elements.phaseDisplay.textContent = `SET ${set} - REST BETWEEN SETS`;
+      elements.phaseDisplay.textContent = `SERIE ${set} - DESCANSO`;
     } else {
-      elements.phaseDisplay.textContent = `SET ${set} - ROUND ${round} - ${type}`;
+      const phase = type === "WORK" ? "TRABAJO" : "DESCANSO";
+      elements.phaseDisplay.textContent = `SERIE ${set} - RONDA ${round} - ${phase}`;
     }
   }
 

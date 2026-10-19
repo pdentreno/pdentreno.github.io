@@ -5,15 +5,28 @@ function setupFullscreen(buttonId = "fullscreenBtn") {
   const btn = document.getElementById(buttonId);
   if (!btn) return;
 
-  btn.addEventListener("click", () => {
-    const elem = document.documentElement;
+  const frame = window.frameElement;
+  const fullscreenTarget = frame || document.documentElement;
+  const fullscreenDocument = frame ? window.parent.document : document;
+  const updateButton = () => {
+    btn.textContent = fullscreenDocument.fullscreenElement ? "❐" : "⛶";
+  };
 
-    if (!document.fullscreenElement) {
-      elem.requestFullscreen().catch(() => { });
-      btn.textContent = "❐";
+  fullscreenDocument.addEventListener("fullscreenchange", updateButton);
+  window.addEventListener("pagehide", () => {
+    fullscreenDocument.removeEventListener("fullscreenchange", updateButton);
+  }, { once: true });
+  updateButton();
+
+  btn.addEventListener("click", () => {
+    if (!fullscreenDocument.fullscreenElement) {
+      fullscreenTarget.requestFullscreen().catch((error) => {
+        console.error("Unable to enter fullscreen mode:", error);
+      });
     } else {
-      document.exitFullscreen().catch(() => { });
-      btn.textContent = "⛶";
+      fullscreenDocument.exitFullscreen().catch((error) => {
+        console.error("Unable to exit fullscreen mode:", error);
+      });
     }
   });
 }
@@ -58,3 +71,26 @@ function isValid(value, required = false) {
   if (!Number.isInteger(value)) return false;
   return required ? value > 0 : value >= 0;
 }
+
+document
+  .querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])')
+  .forEach((element) => {
+    element.tabIndex = 0;
+  });
+
+document.querySelectorAll(".mode-selector").forEach((selector) => {
+  const summary = selector.querySelector("summary");
+
+  selector.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && selector.open) {
+      selector.open = false;
+      summary.focus();
+    }
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!selector.contains(event.target)) {
+      selector.open = false;
+    }
+  });
+});

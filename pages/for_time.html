@@ -14,16 +14,23 @@
 <body>
 
   <!-- Botón volver -->
-  <a class="back-button" href="../index.html">← BACK</a>
+  <a class="back-button" href="../home.html">← Volver</a>
 
-  <!-- CENTRO -->
-  <div class="top-center-text">FOR TIME / AMRAP</div>
+  <details class="mode-selector">
+    <summary aria-label="Cambiar de modo: Por tiempo / AMRAP">Por tiempo / AMRAP</summary>
+    <nav class="mode-menu" aria-label="Modos de entrenamiento">
+      <a href="clock.html">Reloj</a>
+      <a href="tabata.html">Intervalos</a>
+      <a href="for_time.html" aria-current="page">Por tiempo / AMRAP</a>
+      <a href="crono.html">Cronómetro</a>
+    </nav>
+  </details>
 
   <!-- FULLSCREEN -->
-  <button class="fullscreen-button" id="fullscreenBtn">⛶</button>
-  <button class="fullscreen-button edit-button hidden" id="editBtn" title="Edit">✎</button>
+  <button class="fullscreen-button" id="fullscreenBtn" aria-label="Activar pantalla completa" title="Pantalla completa">⛶</button>
+  <button class="fullscreen-button edit-button hidden" id="editBtn" aria-label="Editar tiempo" title="Editar tiempo">✎</button>
 
-  <main class="container">
+  <main class="container timer-stage" id="main-content" tabindex="-1">
 
     <!-- SETUP -->
     <div class="setup" id="setup">
@@ -31,23 +38,23 @@
       <div class="time-inputs">
 
         <div class="time-row">
-          <input type="number" min="0" placeholder="0">
-          <span>HOURS</span>
+          <input type="number" min="0" placeholder="0" aria-label="Horas">
+          <span>Horas</span>
         </div>
 
         <div class="time-row">
-          <input type="number" min="0" placeholder="0">
-          <span>MINUTES</span>
+          <input type="number" min="0" placeholder="0" aria-label="Minutos">
+          <span>Minutos</span>
         </div>
 
         <div class="time-row">
-          <input type="number" min="0" placeholder="0">
-          <span>SECONDS</span>
+          <input type="number" min="0" placeholder="0" aria-label="Segundos">
+          <span>Segundos</span>
         </div>
 
       </div>
 
-      <button class="start-button">START</button>
+      <button class="start-button">Empezar</button>
 
       <div class="error-message" id="errorMessage"></div>
 
@@ -55,7 +62,7 @@
 
     <!-- COUNTDOWN -->
     <div class="countdown-screen hidden" id="countdownScreen">
-      <div id="countdownDisplay">10</div>
+      <div id="countdownDisplay" role="timer" aria-label="Cuenta atrás" aria-live="off">10</div>
       <div id="countdownPaused"></div>
     </div>
 
@@ -63,26 +70,27 @@
     <div class="timer-screen hidden" id="timerScreen">
       <div class="edit-panel hidden" id="editOverlay">
         <div class="edit-row">
-          <input type="number" min="0" id="editHours" placeholder="hh">
-          <input type="number" min="0" id="editMinutes" placeholder="mm">
-          <input type="number" min="0" id="editSeconds" placeholder="ss">
+          <input type="number" min="0" id="editHours" placeholder="hh" aria-label="Horas">
+          <input type="number" min="0" id="editMinutes" placeholder="mm" aria-label="Minutos">
+          <input type="number" min="0" id="editSeconds" placeholder="ss" aria-label="Segundos">
         </div>
         <div class="edit-actions">
-          <button class="start-button" id="confirmEditBtn">CONFIRM</button>
-          <button class="start-button" id="cancelEditBtn">CANCEL</button>
+          <button class="start-button" id="confirmEditBtn">Guardar</button>
+          <button class="start-button" id="cancelEditBtn">Cancelar</button>
         </div>
         <div class="edit-error-message" id="editErrorMessage"></div>
       </div>
-      <div id="timerDisplay">00:00:00</div>
+      <div id="timerDisplay" role="timer" aria-label="Tiempo restante" aria-live="off">00:00:00</div>
       <div id="timerPaused"></div>
     </div>
 
   </main>
 
   <footer class="site-footer">
-    Site created by Lucas Alonso de San Segundo<br>
+    Desarrollado por Lucas Alonso de San Segundo<br>
     <a href="mailto:alonsolucas.developer@gmail.com">alonsolucas.developer@gmail.com</a>
   </footer>
+  <img class="footer-logo" src="../images/pd_3.jpeg" alt="Logotipo de Pablo Durán">
 
   <script src="../scripts/common.js" defer></script>
   <script src="../scripts/for_time.js" defer></script>

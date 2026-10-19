@@ -5,42 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PD Timer</title>
-
   <link rel="stylesheet" href="styles/common.css">
-  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/app-shell.css">
 </head>
 
 <body>
-
-  <main class="container">
-    <h1 class="page-title">PD Timer</h1>
-
-    <button data-target="pages/clock.html">
-      CLOCK
-    </button>
-
-    <button data-target="pages/tabata.html">
-      TABATA / EMOM
-    </button>
-
-    <button data-target="pages/for_time.html">
-      FOR TIME / AMRAP
-    </button>
-
-    <button data-target="pages/crono.html">
-      CRONO
-    </button>
-
-    <div class="bottom-image" aria-hidden="true"></div>
-  </main>
-
-  <footer class="site-footer">
-    Site created by Lucas Alonso de San Segundo<br>
-    <a href="mailto:alonsolucas.developer@gmail.com">alonsolucas.developer@gmail.com</a>
-  </footer>
-
-  <script src="scripts/common.js" defer></script>
-  <script src="scripts/index.js" defer></script>
+  <iframe
+    class="app-frame"
+    src="home.html"
+    title="PD Timer"
+    allowfullscreen>
+  </iframe>
 </body>
 
 </html>

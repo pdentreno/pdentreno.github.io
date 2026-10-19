@@ -78,6 +78,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("keydown", (event) => {
         if (event.code === "Space" || event.key === " ") {
+            if (event.target.closest("button, a, input, select, textarea, [contenteditable='true']")) return;
             event.preventDefault();
             toggleCrono();
         }

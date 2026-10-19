@@ -94,7 +94,6 @@
 }
 
 .edit-panel {
-  margin-top: 16px;
   width: min(560px, 100%);
   background: rgba(0, 0, 0, 0.92);
   border: none;
@@ -168,15 +167,6 @@
   min-height: 24px;
 }
 
-/* TIME */
-#timeDisplay {
-  font-size: 15vw;
-  font-weight: bold;
-  color: #eb7628;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
 /* PHASE */
 #phaseDisplay {
   font-size: 6vw;
@@ -222,4 +212,127 @@
 #countdownPaused.visible {
   opacity: 1;
   visibility: visible;
+}
+
+.form {
+  gap: 14px;
+  max-width: 560px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(25, 28, 31, 0.84);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 106px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.row input {
+  width: 106px;
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.row .label {
+  min-width: 0;
+  color: var(--text);
+  font-size: 0.92rem;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+.row .suffix {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  letter-spacing: 0;
+}
+
+.edit-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.edit-field label {
+  color: var(--muted);
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.edit-row input {
+  min-height: 48px;
+  padding: 10px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.phase-status {
+  position: absolute;
+  top: calc(50% + clamp(5rem, 12vw, 11rem));
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 16px;
+  transform: translateY(-50%);
+}
+
+#phaseDisplay {
+  font-size: clamp(1.4rem, 5vw, 4rem);
+  color: var(--accent);
+  line-height: 1.1;
+  text-align: center;
+}
+
+#phaseDisplay.work {
+  color: #9ed9a3;
+}
+
+#phaseDisplay.rest {
+  color: #f28b82;
+}
+
+#phaseDisplay.set-rest {
+  color: #f2c66d;
+}
+
+#countdownPaused {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  bottom: auto;
+  width: 100%;
+  min-height: 0;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: var(--accent-soft);
+  transform: none;
+}
+
+@media (max-width: 600px) {
+  .form {
+    padding: 21px 16px;
+  }
+
+  .row {
+    grid-template-columns: minmax(0, 1fr) 84px minmax(0, 0.7fr);
+    gap: 9px;
+  }
+
+  .row .label {
+    font-size: 0.82rem;
+  }
+
+  .row .suffix {
+    font-size: 0.66rem;
+  }
 }

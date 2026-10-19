@@ -19,26 +19,22 @@
 }
 
 #cronoDisplay {
-    display: inline-block;
-    width: 12ch;
+    display: block;
     margin: 0 auto;
-    font-family: inherit;
-    font-size: 14vw;
-    font-weight: bold;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-    text-align: center;
-    white-space: nowrap;
 }
 
 .crono-format {
+    position: absolute;
+    top: calc(50% + clamp(3rem, 8vw, 7rem));
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
     font-size: 1rem;
     color: var(--accent-soft);
     text-align: center;
     letter-spacing: 0.18em;
     text-transform: lowercase;
-    margin-top: -24px;
+    margin-top: 0;
 }
 
 #resetBtn {
@@ -54,6 +50,10 @@
 }
 
 .control-row {
+    position: absolute;
+    top: calc(50% + clamp(8rem, 18vw, 17rem));
+    left: 0;
+    transform: translateY(-50%);
     display: flex;
     justify-content: center;
     width: 100%;
@@ -65,8 +65,17 @@
 }
 
 @media (max-width: 600px) {
-    #cronoDisplay {
-        font-size: 18vw;
+    .crono-format {
+        font-size: clamp(0.68rem, 1.3vw, 0.86rem);
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 0;
+        padding-left: 1.2rem;
+    }
+
+    #resetBtn {
+        min-width: 160px;
     }
 
     #resetBtn {

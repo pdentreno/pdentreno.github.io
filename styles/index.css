@@ -1,107 +1,168 @@
 body {
   min-height: 100vh;
-  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px 0 120px;
+  padding: 64px 20px 20px;
 }
 
-/* Contenedor botones */
 .container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: min(760px, 100%);
+  margin: auto;
+}
+
+.home-header {
+  grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: min(360px, 100%);
-  max-width: 420px;
-  padding: 0 16px;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 22px;
+}
+
+.home-copy {
+  flex: 1;
+}
+
+.brand-mark {
+  display: block;
+  flex: 0 0 auto;
+  width: clamp(260px, 40vw, 360px);
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.2em;
 }
 
 .page-title {
-  margin: 0 0 28px;
-  font-size: clamp(2.2rem, 6vw, 3.6rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #eb7628;
-  text-align: center;
-  text-shadow: 0 0 14px rgba(235, 118, 40, 0.24);
-  white-space: nowrap;
-  line-height: 1.05;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2.8rem, 7vw, 5rem);
+  font-weight: 850;
+  letter-spacing: -0.075em;
+  line-height: 0.95;
 }
 
-.bottom-image {
-  display: none;
+.page-title span {
+  color: var(--accent);
+}
+
+.home-description {
+  max-width: 34rem;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.mode-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   width: 100%;
-  max-width: 360px;
-  aspect-ratio: 16 / 10;
-  margin: 0 auto;
+  min-height: 116px;
+  padding: 20px;
+  border: 1px solid var(--line);
   border-radius: 16px;
-  background-image: url("../images/pd_3.jpeg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.95;
+  background: linear-gradient(145deg, rgba(32, 36, 40, 0.96), rgba(25, 28, 31, 0.96));
+  color: var(--text);
+  text-align: left;
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
 }
 
-.bottom-image:hover {
-  transform: scale(1.03);
-  opacity: 1;
-}
-
-/* Botones */
-button {
-  width: 100%;
-  padding: 20px 22px;
-  font-size: clamp(1rem, 4vw, 1.3rem);
-  font-weight: bold;
-  border: 2px solid #eb7628;
-  border-radius: 10px;
-  background: black;
-  color: #eb7628;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s, color 0.2s;
-}
-
-button:hover,
-button:focus {
-  background: #eb7628;
-  color: black;
+.mode-card:hover,
+.mode-card:focus-visible {
+  border-color: rgba(240, 138, 60, 0.72);
+  background: linear-gradient(145deg, #24292d, #1b1e21);
   transform: translateY(-1px);
 }
 
-.bottom-image:hover {
-  transform: scale(1.05);
-  opacity: 1;
+.mode-number {
+  align-self: flex-start;
+  padding-top: 3px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
 }
 
-/* Responsive */
+.mode-copy {
+  display: grid;
+  gap: 7px;
+  flex: 1;
+}
+
+.mode-copy strong {
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  font-weight: 700;
+}
+
+.mode-copy > span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.mode-arrow {
+  color: var(--muted);
+  font-size: 1.15rem;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.mode-card:hover .mode-arrow,
+.mode-card:focus-visible .mode-arrow {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+.site-footer {
+  position: static;
+  padding: 16px 12px;
+  margin-top: 30px;
+}
+
 @media (max-width: 600px) {
   body {
     justify-content: flex-start;
-    padding: 20px 0 140px;
+    padding: 56px 18px 16px;
   }
 
   .container {
-    gap: 16px;
-    padding: 0 12px;
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .brand-mark {
+    align-self: center;
+    width: clamp(220px, 72vw, 340px);
   }
 
   .page-title {
-    font-size: clamp(2rem, 8vw, 3rem);
-    margin-bottom: 20px;
-    white-space: normal;
+    font-size: clamp(2.2rem, 9vw, 3.5rem);
   }
 
-  button {
-    padding: 18px 20px;
-  }
-
-  .bottom-image {
-    display: block;
-    width: 65%;
-    max-width: 180px;
-    margin-top: 28px;
+  .mode-card {
+    min-height: 96px;
+    padding: 17px;
   }
 }

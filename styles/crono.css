@@ -70,7 +70,7 @@
     }
 
     #cronoDisplay {
-        font-size: min(12vw, 24vh, 32rem);
+        font-size: min(14vw, 28vh, 32rem);
     }
 
     .crono-format {

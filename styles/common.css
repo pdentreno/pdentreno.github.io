@@ -320,7 +320,7 @@ input[type="number"]:focus {
 #timerDisplay,
 #timeDisplay,
 #countdownDisplay {
-  font-size: min(19vw, 32vh, 40rem);
+  font-size: min(21vw, 36vh, 40rem);
   font-weight: 750;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -331,7 +331,7 @@ input[type="number"]:focus {
 }
 
 #cronoDisplay {
-  font-size: min(13vw, 28vh, 32rem);
+  font-size: min(15vw, 32vh, 32rem);
   font-weight: 750;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
